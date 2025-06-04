@@ -62,9 +62,8 @@ export default function ChatWindow() {
     typingTimeout = setTimeout(() => {
       socketRef.current?.emit("stopTyping", {
         roomId,
-        userName: currentUser.name,
       });
-    }, 5000); // stop typing after 1s of no input
+    }, 1000); // stop typing after 1s of no input
   };
 
   useEffect(() => {
