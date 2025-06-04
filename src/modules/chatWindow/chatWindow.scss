@@ -1,0 +1,71 @@
+@import "../../assets/scss/variables";
+
+.chat-window {
+  max-height: 100vh;
+  .message-list-container {
+    border: 2px solid $mediumGray;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 10px;
+    height: 75vh;
+    overflow-y: auto;
+    position: relative;
+    .typing-indicator {
+      color: $silver;
+      position: absolute;
+      // margin-bottom: 10px;
+      // bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+  .message-input-outer-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    // border-top: 2px solid $mediumGray;
+    // border: 2px solid $mediumGray;
+    .message-input-inner-container {
+      // border: 2px solid $mediumGray;
+      padding: 10px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      .message-input {
+        .MuiOutlinedInput-root {
+          width: 40vw;
+          min-width: 280px;
+          border-radius: 20px;
+          border-width: 10px;
+          .MuiOutlinedInput-notchedOutline {
+            border-width: 2px;
+          }
+          &:hover {
+            .MuiOutlinedInput-notchedOutline {
+              border-color: $primaryColor;
+            }
+          }
+        }
+        .open-emoji-button {
+          background-color: $lightGray;
+          .insert-emoji-icon {
+            color: $primaryColor;
+          }
+        }
+      }
+      .send-message-button {
+        padding: 10px;
+        margin: 0 10px;
+        background-color: $lightGray;
+        border: none;
+        cursor: pointer;
+        // &:hover {
+        //   background-color: $white;
+        // }
+        .send-message-icon {
+          color: $primaryColor;
+        }
+      }
+    }
+  }
+}

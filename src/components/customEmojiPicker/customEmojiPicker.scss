@@ -1,0 +1,19 @@
+.emoji-picker-modal-backdrop {
+  width: 100%;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.emoji-picker-container {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: -430px;
+  right: -100px;
+
+  @media (max-width: 768px) {
+    right: 0;
+  }
+}

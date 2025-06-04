@@ -1,0 +1,8 @@
+@import "../../assets/scss/variables";
+
+.account-menu {
+  .current-user-avatar {
+    cursor: pointer;
+    border: 2px solid $white;
+  }
+}

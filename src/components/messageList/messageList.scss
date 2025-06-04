@@ -1,0 +1,59 @@
+@import "../../assets/scss/variables";
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  .current-user-message-list-item {
+    border-radius: 0px 50px 50px 50px;
+    background-color: $lightGray;
+    margin: 5px 0;
+    width: fit-content;
+    max-width: 50%;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    .current-user-message-list-item-username {
+      // margin: 4px;
+      background-color: $silver;
+      color: $white;
+      // border: 2px solid $silver;
+      border-radius: 20px;
+      padding: 8px;
+    }
+
+    .current-user-message-list-item-text {
+      width: 100%;
+      // margin: 4px;
+      margin-left: 8px;
+    }
+  }
+  .other-user-message-list-item {
+    border-radius: 50px 0px 50px 50px;
+    background-color: $primaryColor;
+    margin: 5px 0;
+    width: fit-content;
+    max-width: 50%;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: $white;
+    .other-user-message-list-item-username {
+      background-color: $white;
+      color: $primaryColor;
+      border-radius: 20px;
+      margin: 4px 8px;
+      padding: 8px;
+    }
+    .other-user-message-list-item-text {
+      width: 100%;
+      // margin: 4px 8px;
+      margin-left: 16px;
+    }
+  }
+}
