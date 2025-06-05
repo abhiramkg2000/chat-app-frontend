@@ -33,7 +33,6 @@ export default function ChatWindow() {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
-  const typingRef = useRef<HTMLDivElement | null>(null);
 
   const roomId = sessionStorage.getItem("room_id") || "";
 
@@ -134,21 +133,14 @@ export default function ChatWindow() {
     };
   }, [currentUser.clientId]);
 
-  useEffect(() => {
-    if (usersTyping.length > 0 && typingRef.current) {
-      typingRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  }, [usersTyping]);
-
   return (
     <div className="chat-window">
       <div className="message-list-container">
         <MessageList messages={receivedMessages} />
+      </div>
+      <div className="typing-indicator-container">
         {usersTyping.length > 0 && (
-          <div className="typing-indicator" ref={typingRef}>
+          <div className="typing-indicator">
             {usersTyping.map((u) => u.name).join(", ")}{" "}
             {usersTyping.length === 1 ? "is" : "are"} typing...
           </div>
@@ -165,7 +157,7 @@ export default function ChatWindow() {
             autoFocus
             multiline
             minRows={1}
-            maxRows={3}
+            maxRows={4}
             onChange={(e) => {
               setUserMessage(e.target.value);
               handleTyping();

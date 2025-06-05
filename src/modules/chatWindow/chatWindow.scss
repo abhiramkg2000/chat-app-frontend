@@ -7,16 +7,19 @@
     border-radius: 20px;
     padding: 10px;
     margin: 10px;
-    height: 75vh;
+    height: 70vh;
     overflow-y: auto;
-    position: relative;
+  }
+  .typing-indicator-container {
+    padding: 10px;
+    margin: 10px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     .typing-indicator {
       color: $silver;
-      position: absolute;
-      // margin-bottom: 10px;
-      // bottom: 10%;
-      left: 50%;
-      transform: translateX(-50%);
+      font-size: 1rem;
     }
   }
   .message-input-outer-container {
@@ -58,10 +61,6 @@
         margin: 0 10px;
         background-color: $lightGray;
         border: none;
-        cursor: pointer;
-        // &:hover {
-        //   background-color: $white;
-        // }
         .send-message-icon {
           color: $primaryColor;
         }
