@@ -5,6 +5,7 @@ import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
+import DoneIcon from "@mui/icons-material/Done";
 
 import MessageList from "@/components/messageList/messageList";
 import CustomEmojiPicker from "@/components/customEmojiPicker/customEmojiPicker";
@@ -13,16 +14,32 @@ import { setUserClientId } from "@/store/users/usersSlice";
 import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
 import { getSocket } from "@/hooks/socketClient";
 
+import { formatEditedAt } from "@/helper/commonHelper";
+
 import { MessageType, MessageListType } from "@/types/commonTypes";
 
 import "./chatWindow.scss";
 
 let typingTimeout: NodeJS.Timeout;
 
+const initialEditMessageState = {
+  name: "",
+  value: "",
+  clientId: "",
+  messageId: "",
+  isEdited: false,
+  editedAt: "",
+  isDeleted: false,
+};
+
 export default function ChatWindow() {
   const currentUser = useAppSelector((state) => state.user);
 
   const [userMessage, setUserMessage] = useState("");
+  const [editMessage, setEditMessage] = useState<MessageType>(
+    initialEditMessageState
+  );
+  const [isEditing, setIsEditing] = useState(false);
   const [openPicker, setOpenPicker] = useState(false);
   const [receivedMessages, setReceivedMessages] = useState<MessageListType>([]);
   const [usersTyping, setUsersTyping] = useState<
@@ -38,7 +55,7 @@ export default function ChatWindow() {
 
   const handleSendMessage = (e: MouseEvent<HTMLButtonElement>) => {
     if (userMessage) {
-      socketRef.current?.emit("message", {
+      socketRef.current?.emit("message:add", {
         roomId: roomId,
         message: {
           name: currentUser.name,
@@ -50,8 +67,50 @@ export default function ChatWindow() {
     }
   };
 
+  const handleEditingMessage = (editMessage: MessageType) => {
+    setUserMessage(editMessage.value);
+    setEditMessage(editMessage);
+  };
+
+  const handleEditMessage = () => {
+    if (userMessage) {
+      // Checks if the message was actually edited
+      if (userMessage !== editMessage.value) {
+        socketRef.current?.emit("message:edit", {
+          roomId: roomId,
+          message: {
+            ...editMessage,
+            value: userMessage,
+            isEdited: true,
+            editedAt: formatEditedAt(),
+          },
+        });
+      }
+
+      console.log("edited message", { ...editMessage, value: userMessage });
+      setUserMessage("");
+      setIsEditing(false);
+      setEditMessage(initialEditMessageState);
+    }
+  };
+
+  const handleDeleteMessage = (selectedMessageId: string) => {
+    if (selectedMessageId) {
+      socketRef.current?.emit("message:delete", {
+        roomId: roomId,
+        messageId: selectedMessageId,
+      });
+      console.log("message deleted");
+      setUserMessage("");
+      setIsEditing(false);
+      setEditMessage(initialEditMessageState);
+    }
+  };
+
   const handleTyping = () => {
     if (!socketRef.current) return;
+
+    // User starts typing
     socketRef.current?.emit("startTyping", {
       roomId,
       userName: currentUser.name,
@@ -59,6 +118,7 @@ export default function ChatWindow() {
 
     clearTimeout(typingTimeout);
     typingTimeout = setTimeout(() => {
+      // User stops typing
       socketRef.current?.emit("stopTyping", {
         roomId,
       });
@@ -110,6 +170,7 @@ export default function ChatWindow() {
     const socket = socketRef.current;
     if (!socket) return;
 
+    // Listen to user typing
     socket.on(
       "userTyping",
       ({ userName, clientId }: { userName: string; clientId: string }) => {
@@ -123,6 +184,7 @@ export default function ChatWindow() {
       }
     );
 
+    // Listen to user stopped typing
     socket.on("userStoppedTyping", ({ clientId }: { clientId: string }) => {
       setUsersTyping((prev) => prev.filter((u) => u.clientId !== clientId));
     });
@@ -136,7 +198,12 @@ export default function ChatWindow() {
   return (
     <div className="chat-window">
       <div className="message-list-container">
-        <MessageList messages={receivedMessages} />
+        <MessageList
+          messages={receivedMessages}
+          setIsEditing={setIsEditing}
+          handleEditingMessage={handleEditingMessage}
+          handleDeleteMessage={handleDeleteMessage}
+        />
       </div>
       <div className="typing-indicator-container">
         {usersTyping.length > 0 && (
@@ -165,7 +232,11 @@ export default function ChatWindow() {
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault(); // Prevent newline if needed
-                handleSendMessage(e as any);
+                if (isEditing) {
+                  handleEditMessage();
+                } else {
+                  handleSendMessage(e as any);
+                }
               }
             }}
             slotProps={{
@@ -187,9 +258,17 @@ export default function ChatWindow() {
           <IconButton
             className="send-message-button"
             disableRipple={true}
-            onClick={handleSendMessage}
+            onClick={
+              isEditing
+                ? () => handleEditMessage()
+                : (e) => handleSendMessage(e)
+            }
           >
-            <SendIcon className="send-message-icon" />
+            {isEditing ? (
+              <DoneIcon className="done-message-icon" />
+            ) : (
+              <SendIcon className="send-message-icon" />
+            )}
           </IconButton>
           <CustomEmojiPicker
             inputRef={inputRef}

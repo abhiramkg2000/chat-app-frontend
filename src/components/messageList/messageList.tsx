@@ -1,25 +1,30 @@
-import { useEffect, useRef } from "react";
+import { Dispatch, SetStateAction, useState, useEffect, useRef } from "react";
 
 import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
 
-import { useAppSelector } from "@/hooks/storeHooks";
+import MessageListItem from "../messageListItem/messageListItem";
 
-import { MessageListType } from "@/types/commonTypes";
+import { MessageType, MessageListType } from "@/types/commonTypes";
 
 import "./messageList.scss";
 
 export default function MessageList({
   messages,
+  setIsEditing,
+  handleEditingMessage,
+  handleDeleteMessage,
 }: {
   messages: MessageListType;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+  handleEditingMessage: (editMessage: MessageType) => void;
+  handleDeleteMessage: (selectedMessageId: string) => void;
 }) {
-  const currentUser = useAppSelector((state) => state.user);
+  const [selectedMessageId, setSelectedMessageId] = useState("");
 
   const lastMessageRef = useRef<HTMLLIElement | null>(null);
 
   useEffect(() => {
+    // console.log("lastMessageRef: ", lastMessageRef.current);
     lastMessageRef.current?.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -29,45 +34,19 @@ export default function MessageList({
   return (
     <List className="message-list">
       {messages.map((obj, index) => {
-        if (
-          (obj.name === currentUser.name &&
-            obj.clientId === currentUser.clientId) ||
-          (obj.name === currentUser.name && currentUser.name !== "guest")
-        ) {
-          return (
-            <ListItem
-              key={index}
-              className="current-user-message-list-item"
-              ref={index === messages.length - 1 ? lastMessageRef : null}
-            >
-              <ListItemText
-                className="current-user-message-list-item-username"
-                primary={obj.name}
-              />
-              <ListItemText
-                className="current-user-message-list-item-text"
-                primary={obj.value}
-              />
-            </ListItem>
-          );
-        } else {
-          return (
-            <ListItem
-              key={index}
-              className="other-user-message-list-item"
-              ref={index === messages.length - 1 ? lastMessageRef : null}
-            >
-              <ListItemText
-                className="other-user-message-list-item-username"
-                primary={obj.name}
-              />
-              <ListItemText
-                className="other-user-message-list-item-text"
-                primary={obj.value}
-              />
-            </ListItem>
-          );
-        }
+        return (
+          <MessageListItem
+            key={index}
+            message={obj}
+            selectedMessageId={selectedMessageId}
+            setSelectedMessageId={setSelectedMessageId}
+            isLastMessage={index === messages.length - 1}
+            setIsEditing={setIsEditing}
+            handleEditingMessage={handleEditingMessage}
+            handleDeleteMessage={handleDeleteMessage}
+            ref={lastMessageRef}
+          />
+        );
       })}
     </List>
   );

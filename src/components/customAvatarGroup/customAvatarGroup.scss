@@ -3,10 +3,12 @@
 .custom-avatar-group {
   display: flex;
   align-items: center;
+
   .visible-users-avatar {
     border: 2px solid $white;
     margin-left: -8px;
   }
+
   .more-users-avatar {
     background-color: $mediumGray;
     border: 2px solid $white;
@@ -16,13 +18,16 @@
 
 .popover-outer-container {
   padding: 1rem;
+
   .popover-inner-container {
     overflow-y: auto;
     max-height: 100px;
+
     .popover-more-users {
       display: flex;
       align-items: center;
       margin-right: 1rem !important;
+
       .popover-more-users-avatar {
         width: 32px;
         height: 32px;

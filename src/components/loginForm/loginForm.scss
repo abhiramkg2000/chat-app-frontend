@@ -5,25 +5,31 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
   .login-card {
     border-radius: 20px;
     padding: 8px;
     min-width: 25%;
     // box-shadow: 5px 5px 4px $mediumGray !important;
+
     .login-card-content {
       display: flex;
       flex-direction: column;
+
       .user-name-input,
       .room-id-input {
         margin: 10px 0;
+
         .MuiOutlinedInput-root {
           border-radius: 20px;
           // width: 40vw;
           // border-radius: 30px;
           // border-width: 10px;
+
           .MuiOutlinedInput-notchedOutline {
             border-width: 2px;
           }
+
           &:hover {
             .MuiOutlinedInput-notchedOutline {
               border-color: $primaryColor;
@@ -32,16 +38,19 @@
         }
       }
     }
+
     .login-card-actions {
       display: flex;
       justify-content: center;
       padding: 0px 16px 16px 16px;
+
       .generate-room-button,
       .join-room-button {
         background-color: $primaryColor;
         padding: 8px 16px;
         color: $white;
         border-radius: 20px;
+
         &:disabled {
           opacity: 0.5;
         }

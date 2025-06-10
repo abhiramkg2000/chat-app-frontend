@@ -18,22 +18,26 @@
     display: flex;
     align-items: center;
     margin: 10px;
+
     .greeting-header {
       margin-left: 10px;
     }
   }
+
   .room-id-container {
     display: flex;
     flex-direction: column;
     margin: 10px;
-    // align-items: center;
+
     .copy-icon {
       margin: 0 10px;
+
       &:hover {
         cursor: pointer;
       }
     }
   }
+
   .custom-avatar-group-container {
     margin: 10px 10px 10px 18px;
   }

@@ -1,0 +1,96 @@
+@import "../../assets/scss/variables";
+
+.current-user-message-container {
+  display: flex;
+  justify-content: flex-start;
+  margin: 4px 0;
+
+  .current-user-message {
+    border-radius: 0px 50px 50px 50px;
+    background-color: $lightGray;
+    margin: 4px 0;
+    width: fit-content;
+    max-width: 50%;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    // align-self: flex-start;
+    // cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .current-user-message-username {
+      background-color: $silver;
+      color: $white;
+      border-radius: 20px;
+      padding: 8px;
+    }
+
+    .current-user-message-text {
+      width: 100%;
+      margin: 4px 8px;
+    }
+
+    .current-user-message-edited-at,
+    .current-user-message-deleted {
+      margin: 4px 8px;
+      font-style: italic;
+    }
+  }
+
+  .message-action-buttons-container {
+    padding: 8px 16px;
+
+    .edit-message-button,
+    .delete-message-button {
+      background-color: $lightGray;
+      margin: 0px 4px;
+    }
+  }
+}
+
+.other-user-message-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 4px 0;
+
+  .other-user-message {
+    border-radius: 50px 0px 50px 50px;
+    background-color: $primaryColor;
+    margin: 4px 0;
+    width: fit-content;
+    max-width: 50%;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    // align-self: flex-end;
+    // cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: $white;
+
+    .other-user-message-username {
+      background-color: $white;
+      color: $primaryColor;
+      border-radius: 20px;
+      margin: 4px 8px;
+      padding: 8px;
+    }
+
+    .other-user-message-text {
+      width: 100%;
+      margin: 4px 16px;
+    }
+
+    .other-user-message-edited-at,
+    .other-user-message-deleted {
+      margin: 4px 16px;
+      font-style: italic;
+    }
+  }
+}
+
+.selected {
+  background-color: $silver;
+  border-radius: 0px 50px 50px 50px;
+}
