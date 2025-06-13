@@ -1,4 +1,4 @@
-import { MouseEvent, useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Socket } from "socket.io-client";
 
 import TextField from "@mui/material/TextField";
@@ -6,6 +6,7 @@ import SendIcon from "@mui/icons-material/Send";
 import IconButton from "@mui/material/IconButton";
 import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
 import DoneIcon from "@mui/icons-material/Done";
+import CloseIcon from "@mui/icons-material/Close";
 
 import MessageList from "@/components/messageList/messageList";
 import CustomEmojiPicker from "@/components/customEmojiPicker/customEmojiPicker";
@@ -16,30 +17,24 @@ import { getSocket } from "@/hooks/socketClient";
 
 import { formatEditedAt } from "@/helper/commonHelper";
 
+import { INITIAL_EDIT_MESSAGE_STATE } from "@/constants/commonConstants";
+
 import { MessageType, MessageListType } from "@/types/commonTypes";
 
 import "./chatWindow.scss";
 
 let typingTimeout: NodeJS.Timeout;
 
-const initialEditMessageState = {
-  name: "",
-  value: "",
-  clientId: "",
-  messageId: "",
-  isEdited: false,
-  editedAt: "",
-  isDeleted: false,
-};
-
 export default function ChatWindow() {
   const currentUser = useAppSelector((state) => state.user);
 
   const [userMessage, setUserMessage] = useState("");
   const [editMessage, setEditMessage] = useState<MessageType>(
-    initialEditMessageState
+    INITIAL_EDIT_MESSAGE_STATE
   );
   const [isEditing, setIsEditing] = useState(false);
+  const [selectedMessageId, setSelectedMessageId] = useState("");
+  const [isReplying, setIsReplying] = useState(false);
   const [openPicker, setOpenPicker] = useState(false);
   const [receivedMessages, setReceivedMessages] = useState<MessageListType>([]);
   const [usersTyping, setUsersTyping] = useState<
@@ -53,7 +48,17 @@ export default function ChatWindow() {
 
   const roomId = sessionStorage.getItem("room_id") || "";
 
-  const handleSendMessage = (e: MouseEvent<HTMLButtonElement>) => {
+  const repliedToText = receivedMessages.find(
+    (obj) => obj.messageId === selectedMessageId
+  )?.value;
+
+  const truncatedRepliedTo = repliedToText
+    ? repliedToText.length > 30
+      ? repliedToText.slice(0, 30) + "..."
+      : repliedToText
+    : null;
+
+  const handleSendMessage = () => {
     if (userMessage) {
       socketRef.current?.emit("message:add", {
         roomId: roomId,
@@ -63,6 +68,7 @@ export default function ChatWindow() {
           clientId: currentUser.clientId,
         },
       });
+
       setUserMessage("");
     }
   };
@@ -70,6 +76,9 @@ export default function ChatWindow() {
   const handleEditingMessage = (editMessage: MessageType) => {
     setUserMessage(editMessage.value);
     setEditMessage(editMessage);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   const handleEditMessage = () => {
@@ -90,8 +99,32 @@ export default function ChatWindow() {
       console.log("edited message", { ...editMessage, value: userMessage });
       setUserMessage("");
       setIsEditing(false);
-      setEditMessage(initialEditMessageState);
+      setEditMessage(INITIAL_EDIT_MESSAGE_STATE);
+      setSelectedMessageId("");
     }
+  };
+
+  const handleReplyToMessage = () => {
+    if (userMessage) {
+      socketRef.current?.emit("message:replyToMessage", {
+        roomId: roomId,
+        message: {
+          name: currentUser.name,
+          value: userMessage,
+          clientId: currentUser.clientId,
+          replyTo: selectedMessageId,
+        },
+      });
+
+      console.log("replied to message", selectedMessageId);
+      setUserMessage("");
+      setIsReplying(false);
+      setSelectedMessageId("");
+    }
+  };
+
+  const handleReplyCancel = () => {
+    setIsReplying(false);
   };
 
   const handleDeleteMessage = (selectedMessageId: string) => {
@@ -100,12 +133,17 @@ export default function ChatWindow() {
         roomId: roomId,
         messageId: selectedMessageId,
       });
+
       console.log("message deleted");
       setUserMessage("");
       setIsEditing(false);
-      setEditMessage(initialEditMessageState);
+      setEditMessage(INITIAL_EDIT_MESSAGE_STATE);
+      setIsReplying(false);
+      setSelectedMessageId("");
     }
   };
+
+  console.log("set selected message Id", selectedMessageId);
 
   const handleTyping = () => {
     if (!socketRef.current) return;
@@ -140,7 +178,7 @@ export default function ChatWindow() {
     });
 
     // Prefetch messages
-    socket.on("prefetch", (msg: MessageType[]) => {
+    socket.on("prefetch", (msg: MessageListType) => {
       setReceivedMessages(msg);
     });
 
@@ -200,7 +238,10 @@ export default function ChatWindow() {
       <div className="message-list-container">
         <MessageList
           messages={receivedMessages}
+          selectedMessageId={selectedMessageId}
+          setSelectedMessageId={setSelectedMessageId}
           setIsEditing={setIsEditing}
+          setIsReplying={setIsReplying}
           handleEditingMessage={handleEditingMessage}
           handleDeleteMessage={handleDeleteMessage}
         />
@@ -234,8 +275,10 @@ export default function ChatWindow() {
                 e.preventDefault(); // Prevent newline if needed
                 if (isEditing) {
                   handleEditMessage();
+                } else if (isReplying) {
+                  handleReplyToMessage();
                 } else {
-                  handleSendMessage(e as any);
+                  handleSendMessage();
                 }
               }
             }}
@@ -261,7 +304,9 @@ export default function ChatWindow() {
             onClick={
               isEditing
                 ? () => handleEditMessage()
-                : (e) => handleSendMessage(e)
+                : isReplying
+                ? () => handleReplyToMessage()
+                : () => handleSendMessage()
             }
           >
             {isEditing ? (
@@ -277,6 +322,16 @@ export default function ChatWindow() {
             openPicker={openPicker}
             setOpenPicker={setOpenPicker}
           />
+          {isReplying && (
+            <div className="reply-to-container">
+              <div className="reply-close">
+                <IconButton disableRipple={true} onClick={handleReplyCancel}>
+                  <CloseIcon />
+                </IconButton>
+              </div>
+              <div>{`"${truncatedRepliedTo}"`}</div>
+            </div>
+          )}
         </div>
       </div>
     </div>

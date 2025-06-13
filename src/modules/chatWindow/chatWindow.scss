@@ -9,7 +9,6 @@
     padding: 10px;
     margin: 10px;
     height: 70vh;
-    overflow-y: auto;
   }
 
   .typing-indicator-container {
@@ -76,6 +75,26 @@
         .send-message-icon,
         .done-message-icon {
           color: $primaryColor;
+        }
+      }
+
+      .reply-to-container {
+        position: absolute;
+        top: -60px;
+        left: 50%;
+        transform: translateX(-60%);
+        background-color: $lightGray;
+        border-radius: 20px;
+        min-width: 280px;
+        padding: 16px;
+        font-style: italic;
+        white-space: pre-wrap;
+        height: 50px;
+        overflow: hidden;
+        .reply-close {
+          position: absolute;
+          top: 0;
+          right: 0;
         }
       }
     }

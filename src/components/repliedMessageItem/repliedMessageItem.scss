@@ -1,6 +1,6 @@
 @import "../../assets/scss/variables";
 
-.current-user-message-container {
+.current-user-reply-message-container {
   display: flex;
   justify-content: flex-start;
   margin: 4px 0;
@@ -18,6 +18,17 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
+    .current-user-message-replied-to {
+      cursor: pointer;
+      font-style: italic;
+      background-color: $silver;
+      color: $white;
+      border-radius: 20px;
+      padding: 8px;
+      white-space: pre-wrap;
+      //   width:100%;
+    }
 
     .current-user-message-username {
       background-color: $silver;
@@ -50,10 +61,10 @@
   }
 }
 
-.other-user-message-container {
+.other-user-reply-message-container {
   display: flex;
-  flex-direction: row-reverse;
   justify-content: flex-start;
+  flex-direction: row-reverse;
   margin: 4px 0;
 
   .other-user-message {
@@ -70,6 +81,18 @@
     flex-direction: column;
     align-items: flex-start;
     color: $white;
+
+    .other-user-message-replied-to {
+      cursor: pointer;
+      font-style: italic;
+      background-color: $white;
+      color: $primaryColor;
+      border-radius: 20px;
+      margin: 4px 8px;
+      padding: 8px;
+      white-space: pre-wrap;
+      //   width: 100%;
+    }
 
     .other-user-message-username {
       background-color: $white;

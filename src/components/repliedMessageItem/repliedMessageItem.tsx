@@ -13,9 +13,9 @@ import { INITIAL_EDIT_MESSAGE_STATE } from "@/constants/commonConstants";
 
 import { MessageType } from "@/types/commonTypes";
 
-import "./messageListItem.scss";
+import "./repliedMessageItem.scss";
 
-const MessageListItem = forwardRef<
+const RepliedMessageItem = forwardRef<
   HTMLLIElement,
   {
     message: MessageType;
@@ -25,8 +25,10 @@ const MessageListItem = forwardRef<
     setIsReplying: Dispatch<SetStateAction<boolean>>;
     handleEditingMessage: (editMessage: MessageType) => void;
     handleDeleteMessage: (selectedMessageId: string) => void;
+    repliedToMessage: string;
+    messageRefs: Record<string, HTMLLIElement | null>;
   }
->(function MessageListItem(
+>(function RepliedMessageItem(
   {
     message,
     selectedMessageId,
@@ -35,6 +37,8 @@ const MessageListItem = forwardRef<
     setIsReplying,
     handleEditingMessage,
     handleDeleteMessage,
+    repliedToMessage,
+    messageRefs,
   },
   ref
 ) {
@@ -45,12 +49,18 @@ const MessageListItem = forwardRef<
       message.clientId === currentUser.clientId) ||
     (message.name === currentUser.name && currentUser.name !== "guest");
 
+  const truncatedRepliedTo = repliedToMessage
+    ? repliedToMessage.length > 30
+      ? repliedToMessage.slice(0, 30) + "..."
+      : repliedToMessage
+    : null;
+
   return (
     <div
       className={`${
         isSameUser
-          ? "current-user-message-container"
-          : "other-user-message-container"
+          ? "current-user-reply-message-container"
+          : "other-user-reply-message-container"
       } `}
     >
       <ListItem
@@ -77,6 +87,29 @@ const MessageListItem = forwardRef<
             : undefined
         }
       >
+        {repliedToMessage && (
+          <ListItemText
+            className={`${
+              isSameUser
+                ? "current-user-message-replied-to"
+                : "other-user-message-replied-to"
+            }`}
+            primary={`"${truncatedRepliedTo}"`}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log("repliedToMessage", repliedToMessage);
+              // Scroll to the original message element
+              const originalMsgRef = messageRefs[message.replyTo];
+              console.log("originalMsgRef", originalMsgRef);
+              if (originalMsgRef) {
+                originalMsgRef.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }
+            }}
+          />
+        )}
         <ListItemText
           className={`${
             isSameUser
@@ -184,4 +217,4 @@ const MessageListItem = forwardRef<
   );
 });
 
-export default MessageListItem;
+export default RepliedMessageItem;

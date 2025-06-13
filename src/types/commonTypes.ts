@@ -6,6 +6,7 @@ export type MessageType = {
   isEdited: boolean;
   editedAt: string;
   isDeleted: boolean;
+  replyTo: string;
 };
 
 export type MessageListType = MessageType[];
