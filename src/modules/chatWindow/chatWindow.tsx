@@ -15,7 +15,7 @@ import { setUserClientId } from "@/store/users/usersSlice";
 import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
 import { getSocket } from "@/hooks/socketClient";
 
-import { formatEditedAt } from "@/helper/commonHelper";
+import { formatEditedAt, formatReplyToText } from "@/helper/commonHelper";
 
 import { INITIAL_EDIT_MESSAGE_STATE } from "@/constants/commonConstants";
 
@@ -48,15 +48,11 @@ export default function ChatWindow() {
 
   const roomId = sessionStorage.getItem("room_id") || "";
 
-  const repliedToText = receivedMessages.find(
-    (obj) => obj.messageId === selectedMessageId
-  )?.value;
+  const repliedToText =
+    receivedMessages.find((obj) => obj.messageId === selectedMessageId)
+      ?.value || "";
 
-  const truncatedRepliedTo = repliedToText
-    ? repliedToText.length > 30
-      ? repliedToText.slice(0, 30) + "..."
-      : repliedToText
-    : null;
+  const truncatedRepliedTo = formatReplyToText(repliedToText);
 
   const handleSendMessage = () => {
     if (userMessage) {
@@ -254,6 +250,18 @@ export default function ChatWindow() {
           </div>
         )}
       </div>
+      <div className="reply-to-message-container">
+        {isReplying && (
+          <div className="reply-to-message">
+            <div className="reply-text">{`"${truncatedRepliedTo}"`}</div>
+            <div className="reply-close-button">
+              <IconButton disableRipple={true} onClick={handleReplyCancel}>
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </div>
+        )}
+      </div>
       <div className="message-input-outer-container">
         <div className="message-input-inner-container">
           <TextField
@@ -322,16 +330,6 @@ export default function ChatWindow() {
             openPicker={openPicker}
             setOpenPicker={setOpenPicker}
           />
-          {isReplying && (
-            <div className="reply-to-container">
-              <div className="reply-close">
-                <IconButton disableRipple={true} onClick={handleReplyCancel}>
-                  <CloseIcon />
-                </IconButton>
-              </div>
-              <div>{`"${truncatedRepliedTo}"`}</div>
-            </div>
-          )}
         </div>
       </div>
     </div>

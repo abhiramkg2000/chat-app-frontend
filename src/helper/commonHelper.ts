@@ -22,3 +22,19 @@ export const formatEditedAt = () => {
 
   return `${day}/${month}/${year}, ${hours}:${minutes}`;
 };
+
+export function formatReplyToText(text: string, maxLength = 30): string {
+  if (!text) return "";
+
+  const hasNewline = text.includes("\n");
+  const firstLine = text.split("\n")[0];
+
+  let result = firstLine;
+
+  if (result.length > maxLength) {
+    result = result.slice(0, maxLength);
+    return result + "...";
+  }
+
+  return hasNewline ? result + "..." : result;
+}

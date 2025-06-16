@@ -8,7 +8,7 @@
     border-radius: 20px;
     padding: 10px;
     margin: 10px;
-    height: 70vh;
+    height: 65vh;
   }
 
   .typing-indicator-container {
@@ -22,6 +22,28 @@
     .typing-indicator {
       color: $silver;
       font-size: 1rem;
+    }
+  }
+
+  .reply-to-message-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    height: 40px;
+
+    .reply-to-message {
+      display: flex;
+      align-items: center;
+      position: relative;
+      left: -20px;
+      background-color: $lightGray;
+      border-radius: 20px;
+      max-width: 280px;
+      width: fit-content;
+      padding: 8px;
+      font-style: italic;
+      white-space: pre-wrap;
+      overflow: hidden;
     }
   }
 
@@ -75,26 +97,6 @@
         .send-message-icon,
         .done-message-icon {
           color: $primaryColor;
-        }
-      }
-
-      .reply-to-container {
-        position: absolute;
-        top: -60px;
-        left: 50%;
-        transform: translateX(-60%);
-        background-color: $lightGray;
-        border-radius: 20px;
-        min-width: 280px;
-        padding: 16px;
-        font-style: italic;
-        white-space: pre-wrap;
-        height: 50px;
-        overflow: hidden;
-        .reply-close {
-          position: absolute;
-          top: 0;
-          right: 0;
         }
       }
     }
