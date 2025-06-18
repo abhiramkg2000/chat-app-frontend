@@ -23,8 +23,6 @@ import { MessageType, MessageListType } from "@/types/commonTypes";
 
 import "./chatWindow.scss";
 
-let typingTimeout: NodeJS.Timeout;
-
 export default function ChatWindow() {
   const currentUser = useAppSelector((state) => state.user);
 
@@ -45,6 +43,7 @@ export default function ChatWindow() {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const roomId = sessionStorage.getItem("room_id") || "";
 
@@ -150,12 +149,17 @@ export default function ChatWindow() {
       userName: currentUser.name,
     });
 
-    clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => {
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
+    }
+
+    typingTimeoutRef.current = setTimeout(() => {
       // User stops typing
       socketRef.current?.emit("stopTyping", {
         roomId,
       });
+      typingTimeoutRef.current = null;
     }, 1000); // stop typing after 1s of no input
   };
 
@@ -195,6 +199,11 @@ export default function ChatWindow() {
       socket.off("connect");
       socket.off("prefetch");
       socket.off("reply");
+
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+        typingTimeoutRef.current = null;
+      }
     };
   }, []);
 
