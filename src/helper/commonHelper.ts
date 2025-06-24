@@ -38,3 +38,22 @@ export function formatReplyToText(text: string, maxLength = 30): string {
 
   return hasNewline ? result + "..." : result;
 }
+
+export function formatTypingIndicatorText(
+  usersTyping: { name: string; clientId: string }[],
+  maxVisible = 2
+) {
+  if (!usersTyping || usersTyping.length === 0) return "";
+
+  const visibleUsers = usersTyping.slice(0, maxVisible);
+  const othersCount = usersTyping.length - visibleUsers.length;
+  const names = visibleUsers.map((u) => u.name).join(", ");
+
+  if (othersCount > 0) {
+    return `${names} and ${othersCount} other${
+      othersCount > 1 ? "s" : ""
+    } are typing...`;
+  } else {
+    return `${names} ${usersTyping.length === 1 ? "is" : "are"} typing...`;
+  }
+}

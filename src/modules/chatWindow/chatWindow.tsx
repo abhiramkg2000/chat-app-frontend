@@ -15,7 +15,11 @@ import { setUserClientId } from "@/store/users/usersSlice";
 import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
 import { getSocket } from "@/hooks/socketClient";
 
-import { formatEditedAt, formatReplyToText } from "@/helper/commonHelper";
+import {
+  formatEditedAt,
+  formatReplyToText,
+  formatTypingIndicatorText,
+} from "@/helper/commonHelper";
 
 import { INITIAL_EDIT_MESSAGE_STATE } from "@/constants/commonConstants";
 
@@ -36,7 +40,7 @@ export default function ChatWindow() {
   const [openPicker, setOpenPicker] = useState(false);
   const [receivedMessages, setReceivedMessages] = useState<MessageListType>([]);
   const [usersTyping, setUsersTyping] = useState<
-    { name: String; clientId: string }[]
+    { name: string; clientId: string }[]
   >([]);
 
   const dispatch = useAppDispatch();
@@ -254,8 +258,7 @@ export default function ChatWindow() {
       <div className="typing-indicator-container">
         {usersTyping.length > 0 && (
           <div className="typing-indicator">
-            {usersTyping.map((u) => u.name).join(", ")}{" "}
-            {usersTyping.length === 1 ? "is" : "are"} typing...
+            {formatTypingIndicatorText(usersTyping)}
           </div>
         )}
       </div>
