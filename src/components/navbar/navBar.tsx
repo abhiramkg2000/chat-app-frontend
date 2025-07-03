@@ -9,7 +9,6 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import AccountMenu from "@/components/accountMenu/accountMenu";
 import CustomAvatarGroup from "@/components/customAvatarGroup/customAvatarGroup";
 
-import { useAppSelector } from "@/hooks/storeHooks";
 import { getSocket } from "@/hooks/socketClient";
 
 import { RoomUsersType } from "@/types/commonTypes";
@@ -17,11 +16,10 @@ import { RoomUsersType } from "@/types/commonTypes";
 import "./navBar.scss";
 
 export default function NavBar() {
-  const currentUser = useAppSelector((state) => state.user);
-
   const [isCopied, setIsCopied] = useState(false);
   const [fetchedUsers, setFetchedUsers] = useState<RoomUsersType>([]);
 
+  const userName = sessionStorage.getItem("user_name") || "guest";
   const roomId = sessionStorage.getItem("room_id") || "";
 
   useEffect(() => {
@@ -35,7 +33,7 @@ export default function NavBar() {
       // Emit joinroom here too (same as in chatWindow)
       socket.emit("joinroom", {
         roomId,
-        userName: currentUser.name,
+        userName: userName,
       });
     });
 
@@ -55,9 +53,7 @@ export default function NavBar() {
     <AppBar className="navbar">
       <Box className="user-profile-container">
         <AccountMenu />
-        <h2 className="greeting-header">
-          Welcome {currentUser.name ? currentUser.name + "!" : "guest!"}
-        </h2>
+        <h2 className="greeting-header">Welcome {userName + "!"}</h2>
       </Box>
       <Box className="room-id-container">
         <Typography variant="subtitle1">Room ID:</Typography>

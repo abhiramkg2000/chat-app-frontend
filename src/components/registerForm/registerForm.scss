@@ -1,24 +1,23 @@
 @import "../../assets/scss/variables";
 
-.login-page {
-  // min-height: 100vh;
+.register-page {
+  //   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  .login-card {
+  .register-card {
     border-radius: 20px;
     padding: 8px;
     // min-width: 25%;
     width: 350px;
-    //box-shadow: 5px 5px 4px $mediumGray !important;
+    // box-shadow: 5px 5px 4px $mediumGray !important;
 
-    .login-card-content {
+    .register-card-content {
       display: flex;
       flex-direction: column;
 
       .user-name-input,
-      .room-id-input,
       .password-input {
         margin: 10px 0;
 
@@ -44,13 +43,12 @@
       }
     }
 
-    .login-card-actions {
+    .register-card-actions {
       display: flex;
       justify-content: center;
       padding: 0px 16px 16px 16px;
 
-      .generate-room-button,
-      .join-room-button {
+      .register-button {
         background-color: $primaryColor;
         padding: 8px 16px;
         color: $white;

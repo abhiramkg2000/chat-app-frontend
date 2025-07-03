@@ -21,7 +21,10 @@ import {
   formatTypingIndicatorText,
 } from "@/helper/commonHelper";
 
-import { INITIAL_EDIT_MESSAGE_STATE } from "@/constants/commonConstants";
+import {
+  INITIAL_EDIT_MESSAGE_STATE,
+  MESSAGE_REGEX,
+} from "@/constants/commonConstants";
 
 import { MessageType, MessageListType } from "@/types/commonTypes";
 
@@ -49,6 +52,7 @@ export default function ChatWindow() {
   const socketRef = useRef<Socket | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const userName = sessionStorage.getItem("user_name") || "";
   const roomId = sessionStorage.getItem("room_id") || "";
 
   const repliedToText =
@@ -58,17 +62,20 @@ export default function ChatWindow() {
   const truncatedRepliedTo = formatReplyToText(repliedToText);
 
   const handleSendMessage = () => {
-    if (userMessage) {
+    if (MESSAGE_REGEX.test(userMessage)) {
       socketRef.current?.emit("message:add", {
         roomId: roomId,
         message: {
-          name: currentUser.name,
+          name: userName,
           value: userMessage,
           clientId: currentUser.clientId,
         },
       });
 
       setUserMessage("");
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
     }
   };
 
@@ -81,7 +88,7 @@ export default function ChatWindow() {
   };
 
   const handleEditMessage = () => {
-    if (userMessage) {
+    if (MESSAGE_REGEX.test(userMessage)) {
       // Checks if the message was actually edited
       if (userMessage !== editMessage.value) {
         socketRef.current?.emit("message:edit", {
@@ -104,11 +111,11 @@ export default function ChatWindow() {
   };
 
   const handleReplyToMessage = () => {
-    if (userMessage) {
+    if (MESSAGE_REGEX.test(userMessage)) {
       socketRef.current?.emit("message:replyToMessage", {
         roomId: roomId,
         message: {
-          name: currentUser.name,
+          name: userName,
           value: userMessage,
           clientId: currentUser.clientId,
           replyTo: selectedMessageId,
@@ -150,7 +157,7 @@ export default function ChatWindow() {
     // User starts typing
     socketRef.current?.emit("startTyping", {
       roomId,
-      userName: currentUser.name,
+      userName: userName,
     });
 
     if (typingTimeoutRef.current) {
@@ -177,7 +184,7 @@ export default function ChatWindow() {
       console.log("in chatWindow Connected, joining room:", roomId);
       socket.emit("joinroom", {
         roomId: roomId,
-        userName: currentUser.name,
+        userName: userName,
       });
     });
 
@@ -328,6 +335,7 @@ export default function ChatWindow() {
                 ? () => handleReplyToMessage()
                 : () => handleSendMessage()
             }
+            disabled={!MESSAGE_REGEX.test(userMessage)}
           >
             {isEditing ? (
               <DoneIcon className="done-message-icon" />

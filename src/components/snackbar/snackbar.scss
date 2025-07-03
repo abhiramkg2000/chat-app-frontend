@@ -1,0 +1,8 @@
+@import "../../assets/scss/variables";
+
+.snackbar {
+  .MuiSnackbarContent-root {
+    color: $white;
+    background-color: $primaryColor;
+  }
+}

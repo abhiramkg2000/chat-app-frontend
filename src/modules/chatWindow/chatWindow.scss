@@ -42,7 +42,7 @@
       max-width: 280px;
       width: fit-content;
       padding: 8px;
-      font-style: italic;
+      // font-style: italic;
       white-space: pre-wrap;
       overflow: hidden;
     }
@@ -98,6 +98,9 @@
         .send-message-icon,
         .done-message-icon {
           color: $primaryColor;
+        }
+        &:disabled {
+          opacity: 0.5;
         }
       }
     }

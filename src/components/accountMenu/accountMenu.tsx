@@ -10,26 +10,30 @@ import IconButton from "@mui/material/IconButton";
 import Logout from "@mui/icons-material/Logout";
 
 import { resetUser } from "@/store/users/usersSlice";
-import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
+import { useAppDispatch } from "@/hooks/storeHooks";
 import { disconnectSocket } from "@/hooks/socketClient";
 
 import "./accountMenu.scss";
 
 export default function AccountMenu() {
-  const user = useAppSelector((state) => state.user);
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  const userName = sessionStorage.getItem("user_name") || "";
+
   const handleLogout = () => {
     handleMenuClose();
     disconnectSocket();
-    dispatch(resetUser());
-    sessionStorage.removeItem("room_id");
-    router.push("/");
+    router.push("/auth/login");
+
+    setTimeout(() => {
+      dispatch(resetUser());
+      sessionStorage.removeItem("room_id");
+      sessionStorage.removeItem("user_name");
+    }, 1000);
   };
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) => {
@@ -45,7 +49,7 @@ export default function AccountMenu() {
       <Box className="account-menu">
         <IconButton disableRipple={true} sx={{ padding: 0 }}>
           <Avatar className="current-user-avatar" onClick={handleMenuClick}>
-            {user.name.slice(0, 2)}
+            {userName.slice(0, 2)}
           </Avatar>
         </IconButton>
       </Box>

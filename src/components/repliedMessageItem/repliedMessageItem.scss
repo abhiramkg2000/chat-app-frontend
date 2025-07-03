@@ -21,7 +21,7 @@
 
     .current-user-message-replied-to {
       cursor: pointer;
-      font-style: italic;
+      // font-style: italic;
       background-color: $silver;
       color: $white;
       border-radius: 20px;
@@ -84,7 +84,7 @@
 
     .other-user-message-replied-to {
       cursor: pointer;
-      font-style: italic;
+      // font-style: italic;
       background-color: $white;
       color: $primaryColor;
       border-radius: 20px;

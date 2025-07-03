@@ -4,13 +4,13 @@
   padding: 10px;
   background-color: $primaryColor;
   display: flex;
-  flex-direction: row;
+  flex-direction: row !important;
   justify-content: space-between;
   align-items: center;
-  position: static;
+  position: static !important;
 
   @media (max-width: 768px) {
-    flex-direction: column;
+    flex-direction: column !important;
     align-items: flex-start;
   }
 
