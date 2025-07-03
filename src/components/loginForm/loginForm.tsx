@@ -12,9 +12,12 @@ import TextField from "@mui/material/TextField";
 import SnackBar from "@/components/snackbar/snackbar";
 
 import {
-  ROOM_ID_REGEX,
   USER_NAME_REGEX,
   USER_PASSWORD_REGEX,
+  ROOM_ID_REGEX,
+  USER_NAME_HELPER_TEXT,
+  USER_PASSWORD_HELPER_TEXT,
+  ROOM_ID_HELPER_TEXT,
 } from "@/constants/commonConstants";
 
 import "./loginForm.scss";
@@ -166,7 +169,7 @@ export default function LoginForm() {
               error={touched.username && !USER_NAME_REGEX.test(userName)}
               helperText={
                 touched.username && !USER_NAME_REGEX.test(userName)
-                  ? "username can contain only letters, digits and underscore"
+                  ? USER_NAME_HELPER_TEXT
                   : ""
               }
               required
@@ -186,7 +189,7 @@ export default function LoginForm() {
               }
               helperText={
                 touched.password && !USER_PASSWORD_REGEX.test(userPassword)
-                  ? "password should contain:\n1. At least one lowercase letter\n2. At least one uppercase letter\n3. At least one digit\n4. At least one special character from:@$!%*?&\n5. Minimum 8 characters"
+                  ? USER_PASSWORD_HELPER_TEXT
                   : ""
               }
               required
@@ -203,7 +206,7 @@ export default function LoginForm() {
               error={touched.roomId && !ROOM_ID_REGEX.test(roomId)}
               helperText={
                 touched.roomId && !ROOM_ID_REGEX.test(roomId)
-                  ? "Room ID can contain only letters, digits and hyphen"
+                  ? ROOM_ID_HELPER_TEXT
                   : ""
               }
               required

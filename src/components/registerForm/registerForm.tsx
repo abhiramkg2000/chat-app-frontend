@@ -13,6 +13,8 @@ import SnackBar from "@/components/snackbar/snackbar";
 import {
   USER_NAME_REGEX,
   USER_PASSWORD_REGEX,
+  USER_NAME_HELPER_TEXT,
+  USER_PASSWORD_HELPER_TEXT,
 } from "@/constants/commonConstants";
 
 import "./registerForm.scss";
@@ -96,7 +98,7 @@ export default function RegisterForm() {
               error={touched.username && !USER_NAME_REGEX.test(userName)}
               helperText={
                 touched.username && !USER_NAME_REGEX.test(userName)
-                  ? "username can contain only letters,digits and underscore"
+                  ? USER_NAME_HELPER_TEXT
                   : ""
               }
               required
@@ -116,7 +118,7 @@ export default function RegisterForm() {
               }
               helperText={
                 touched.password && !USER_PASSWORD_REGEX.test(userPassword)
-                  ? "password should contain:\n1. At least one lowercase letter\n2. At least one uppercase letter\n3. At least one digit\n4. At least one special character from:@$!%*?&\n5. Minimum 8 characters"
+                  ? USER_PASSWORD_HELPER_TEXT
                   : ""
               }
               required
