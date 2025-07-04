@@ -1,4 +1,4 @@
-@import "../../assets/scss/variables";
+@use "../../assets/scss/variables";
 
 .register-page {
   // min-height: 100vh;
@@ -11,7 +11,7 @@
     padding: 8px;
     // min-width: 25%;
     width: 350px;
-    // box-shadow: 5px 5px 4px $mediumGray !important;
+    // box-shadow: 5px 5px 4px variables.$mediumGray !important;
 
     .register-card-content {
       display: flex;
@@ -33,7 +33,7 @@
 
           &:hover {
             .MuiOutlinedInput-notchedOutline {
-              border-color: $primaryColor;
+              border-color: variables.$primaryColor;
             }
           }
         }
@@ -49,9 +49,9 @@
       padding: 0px 16px 16px 16px;
 
       .register-button {
-        background-color: $primaryColor;
+        background-color: variables.$primaryColor;
         padding: 8px 16px;
-        color: $white;
+        color: variables.$white;
         border-radius: 20px;
 
         &:disabled {

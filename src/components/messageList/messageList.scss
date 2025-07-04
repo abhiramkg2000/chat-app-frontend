@@ -1,4 +1,4 @@
-@import "../../assets/scss/variables";
+@use "../../assets/scss/variables";
 
 .message-list {
   display: flex;
@@ -16,8 +16,8 @@
     transform: translateX(-50%);
     margin: 10px 0;
     padding: 8px;
-    background-color: $primaryColor;
-    color: $white;
+    background-color: variables.$primaryColor;
+    color: variables.$white;
     border-radius: 16px;
     font-size: 14px;
     cursor: pointer;
@@ -27,7 +27,7 @@
     text-align: center;
     margin: 10px 0;
     padding: 8px;
-    color: $silver;
+    color: variables.$silver;
     font-size: 14px;
   }
 }

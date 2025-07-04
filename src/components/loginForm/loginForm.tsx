@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
@@ -8,6 +8,10 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import SnackBar from "@/components/snackbar/snackbar";
 
@@ -34,6 +38,7 @@ export default function LoginForm() {
     password: false,
     roomId: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -63,6 +68,16 @@ export default function LoginForm() {
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
+  };
+
+  const handleShowPassword = () => setShowPassword((prev) => !prev);
+
+  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
   };
 
   const validateRoomId = async () => {
@@ -129,10 +144,6 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (isValidRoom) {
-      if (!userName) {
-        setUserName("guest");
-      }
-
       sessionStorage.setItem("room_id", roomId);
       sessionStorage.setItem("user_name", userName);
 
@@ -146,9 +157,7 @@ export default function LoginForm() {
         roomId: false,
       });
 
-      setTimeout(() => {
-        router.push("/chats");
-      }, 1000);
+      router.push("/chats");
     }
   }, [isValidRoom]);
 
@@ -177,7 +186,7 @@ export default function LoginForm() {
             <TextField
               className="password-input"
               name="Password"
-              // type="password"
+              type={showPassword ? "text" : "password"}
               label="Password"
               value={userPassword}
               autoComplete="off"
@@ -193,6 +202,23 @@ export default function LoginForm() {
                   : ""
               }
               required
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        onMouseUp={handleMouseUpPassword}
+                        disableRipple={true}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
             />
             <TextField
               className="room-id-input"

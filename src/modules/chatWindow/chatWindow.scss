@@ -1,10 +1,10 @@
-@import "../../assets/scss/variables";
+@use "../../assets/scss/variables";
 
 .chat-window {
   max-height: 100vh;
 
   .message-list-container {
-    border: 2px solid $mediumGray;
+    border: 2px solid variables.$mediumGray;
     border-radius: 20px;
     padding: 10px;
     margin: 10px;
@@ -21,7 +21,7 @@
     align-items: center;
 
     .typing-indicator {
-      color: $silver;
+      color: variables.$silver;
       font-size: 1rem;
     }
   }
@@ -37,7 +37,7 @@
       align-items: center;
       position: relative;
       left: -20px;
-      background-color: $lightGray;
+      background-color: variables.$lightGray;
       border-radius: 20px;
       max-width: 280px;
       width: fit-content;
@@ -52,11 +52,11 @@
     display: flex;
     justify-content: center;
     margin: 10px;
-    // border-top: 2px solid $mediumGray;
-    // border: 2px solid $mediumGray;
+    // border-top: 2px solid variables.$mediumGray;
+    // border: 2px solid variables.$mediumGray;
 
     .message-input-inner-container {
-      // border: 2px solid $mediumGray;
+      // border: 2px solid variables.$mediumGray;
       padding: 10px;
       position: relative;
       display: flex;
@@ -75,16 +75,16 @@
 
           &:hover {
             .MuiOutlinedInput-notchedOutline {
-              border-color: $primaryColor;
+              border-color: variables.$primaryColor;
             }
           }
         }
 
         .open-emoji-button {
-          background-color: $lightGray;
+          background-color: variables.$lightGray;
 
           .insert-emoji-icon {
-            color: $primaryColor;
+            color: variables.$primaryColor;
           }
         }
       }
@@ -92,12 +92,12 @@
       .send-message-button {
         padding: 10px;
         margin: 0 10px;
-        background-color: $lightGray;
+        background-color: variables.$lightGray;
         border: none;
 
         .send-message-icon,
         .done-message-icon {
-          color: $primaryColor;
+          color: variables.$primaryColor;
         }
         &:disabled {
           opacity: 0.5;

@@ -1,17 +1,17 @@
-@import "../../assets/scss/variables";
+@use "../../assets/scss/variables";
 
 .custom-avatar-group {
   display: flex;
   align-items: center;
 
   .visible-users-avatar {
-    border: 2px solid $white;
+    border: 2px solid variables.$white;
     margin-left: -8px;
   }
 
   .more-users-avatar {
-    background-color: $mediumGray;
-    border: 2px solid $white;
+    background-color: variables.$mediumGray;
+    border: 2px solid variables.$white;
     margin-left: -8px;
   }
 }

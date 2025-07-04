@@ -1,4 +1,4 @@
-@import "../../assets/scss/variables";
+@use "../../assets/scss/variables";
 
 .current-user-message-container {
   display: flex;
@@ -7,7 +7,7 @@
 
   .current-user-message {
     border-radius: 0px 50px 50px 50px;
-    background-color: $lightGray;
+    background-color: variables.$lightGray;
     margin: 4px 0;
     width: fit-content;
     max-width: 50%;
@@ -20,8 +20,8 @@
     align-items: flex-start;
 
     .current-user-message-username {
-      background-color: $silver;
-      color: $white;
+      background-color: variables.$silver;
+      color: variables.$white;
       border-radius: 20px;
       padding: 8px;
     }
@@ -44,7 +44,7 @@
     .edit-message-button,
     .delete-message-button,
     .reply-to-message-button {
-      background-color: $lightGray;
+      background-color: variables.$lightGray;
       margin: 0px 4px;
     }
   }
@@ -58,7 +58,7 @@
 
   .other-user-message {
     border-radius: 50px 0px 50px 50px;
-    background-color: $primaryColor;
+    background-color: variables.$primaryColor;
     margin: 4px 0;
     width: fit-content;
     max-width: 50%;
@@ -69,11 +69,11 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    color: $white;
+    color: variables.$white;
 
     .other-user-message-username {
-      background-color: $white;
-      color: $primaryColor;
+      background-color: variables.$white;
+      color: variables.$primaryColor;
       border-radius: 20px;
       margin: 4px 8px;
       padding: 8px;
@@ -95,7 +95,7 @@
     padding: 8px 16px;
 
     .reply-to-message-button {
-      background-color: $lightGray;
+      background-color: variables.$lightGray;
       margin: 0px 4px;
     }
   }

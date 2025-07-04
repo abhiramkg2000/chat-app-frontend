@@ -1,8 +1,8 @@
-@import "../../assets/scss/variables";
+@use "../../assets/scss/variables";
 
 .navbar {
   padding: 10px;
-  background-color: $primaryColor;
+  background-color: variables.$primaryColor;
   display: flex;
   flex-direction: row !important;
   justify-content: space-between;

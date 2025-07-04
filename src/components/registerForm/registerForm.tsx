@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import Box from "@mui/material/Box";
@@ -7,6 +7,10 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import SnackBar from "@/components/snackbar/snackbar";
 
@@ -28,6 +32,7 @@ export default function RegisterForm() {
     username: false,
     password: false,
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
 
@@ -39,6 +44,20 @@ export default function RegisterForm() {
   const handleUserPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setUserPassword(value);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const handleShowPassword = () => setShowPassword((prev) => !prev);
+
+  const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
   };
 
   const handleUserRegister = async () => {
@@ -77,10 +96,6 @@ export default function RegisterForm() {
     }
   };
 
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
-  };
-
   return (
     <>
       <Box className="register-page">
@@ -106,7 +121,7 @@ export default function RegisterForm() {
             <TextField
               className="password-input"
               name="Password"
-              // type="password"
+              type={showPassword ? "text" : "password"}
               label="Password"
               value={userPassword}
               autoComplete="off"
@@ -121,6 +136,23 @@ export default function RegisterForm() {
                   ? USER_PASSWORD_HELPER_TEXT
                   : ""
               }
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        onMouseUp={handleMouseUpPassword}
+                        disableRipple={true}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
               required
             />
           </CardContent>
