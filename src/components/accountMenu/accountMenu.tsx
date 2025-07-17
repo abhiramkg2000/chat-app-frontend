@@ -9,6 +9,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import IconButton from "@mui/material/IconButton";
 import Logout from "@mui/icons-material/Logout";
 
+import SnackBar from "@/components/snackbar/snackbar";
+
 import { resetUser } from "@/store/users/usersSlice";
 import { useAppDispatch } from "@/hooks/storeHooks";
 import { disconnectSocket } from "@/hooks/socketClient";
@@ -17,6 +19,9 @@ import "./accountMenu.scss";
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
   const open = Boolean(anchorEl);
 
   const router = useRouter();
@@ -24,10 +29,34 @@ export default function AccountMenu() {
 
   const userName = sessionStorage.getItem("user_name") || "";
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("http://localhost:3001/user/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
+
+      const data = await res.json();
+      console.log("Logout response:", data);
+
+      setSnackbarMessage(data.message);
+      setSnackbarOpen(true);
+    } catch (e) {
+      console.log(e);
+      setSnackbarMessage("Logout failed");
+      setSnackbarOpen(true);
+    }
+
     handleMenuClose();
     disconnectSocket();
-    router.push("/auth/login");
+
+    setTimeout(() => {
+      router.push("/auth/login");
+    }, 500);
 
     setTimeout(() => {
       dispatch(resetUser());
@@ -42,6 +71,10 @@ export default function AccountMenu() {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -100,6 +133,11 @@ export default function AccountMenu() {
           Logout
         </MenuItem>
       </Menu>
+      <SnackBar
+        open={snackbarOpen}
+        message={snackbarMessage}
+        handleClose={handleSnackbarClose}
+      />
     </>
   );
 }

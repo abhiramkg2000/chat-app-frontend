@@ -117,6 +117,7 @@ export default function LoginForm() {
     try {
       const res = await fetch("http://localhost:3001/user/login", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           "ngrok-skip-browser-warning": "true",
@@ -157,7 +158,9 @@ export default function LoginForm() {
         roomId: false,
       });
 
-      router.push("/chats");
+      setTimeout(() => {
+        router.push("/chats");
+      }, 500);
     }
   }, [isValidRoom]);
 
