@@ -147,10 +147,7 @@ export default function ChatWindow() {
     if (!socketRef.current) return;
 
     // User starts typing
-    socketRef.current?.emit("startTyping", {
-      roomId: currentUser.roomId,
-      userName: currentUser.name,
-    });
+    socketRef.current?.emit("startTyping");
 
     if (typingTimeoutRef.current) {
       clearTimeout(typingTimeoutRef.current);
@@ -159,9 +156,7 @@ export default function ChatWindow() {
 
     typingTimeoutRef.current = setTimeout(() => {
       // User stops typing
-      socketRef.current?.emit("stopTyping", {
-        roomId: currentUser.roomId,
-      });
+      socketRef.current?.emit("stopTyping");
       typingTimeoutRef.current = null;
     }, 1000); // stop typing after 1s of no input
   };
