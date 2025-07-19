@@ -11,8 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MessageList from "@/components/messageList/messageList";
 import CustomEmojiPicker from "@/components/customEmojiPicker/customEmojiPicker";
 
-import { setUserClientId } from "@/store/users/usersSlice";
-import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
+import { useAppSelector } from "@/hooks/storeHooks";
 import { getSocket } from "@/hooks/socketClient";
 
 import {
@@ -46,14 +45,9 @@ export default function ChatWindow() {
     { name: string; clientId: string }[]
   >([]);
 
-  const dispatch = useAppDispatch();
-
   const inputRef = useRef<HTMLInputElement | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  const userName = sessionStorage.getItem("user_name") || "";
-  const roomId = sessionStorage.getItem("room_id") || "";
 
   const repliedToText =
     receivedMessages.find((obj) => obj.messageId === selectedMessageId)
@@ -64,9 +58,8 @@ export default function ChatWindow() {
   const handleSendMessage = () => {
     if (MESSAGE_REGEX.test(userMessage)) {
       socketRef.current?.emit("message:add", {
-        roomId: roomId,
+        roomId: currentUser.roomId,
         message: {
-          name: userName,
           value: userMessage,
           clientId: currentUser.clientId,
         },
@@ -92,7 +85,7 @@ export default function ChatWindow() {
       // Checks if the message was actually edited
       if (userMessage !== editMessage.value) {
         socketRef.current?.emit("message:edit", {
-          roomId: roomId,
+          roomId: currentUser.roomId,
           message: {
             ...editMessage,
             value: userMessage,
@@ -113,9 +106,8 @@ export default function ChatWindow() {
   const handleReplyToMessage = () => {
     if (MESSAGE_REGEX.test(userMessage)) {
       socketRef.current?.emit("message:replyToMessage", {
-        roomId: roomId,
+        roomId: currentUser.roomId,
         message: {
-          name: userName,
           value: userMessage,
           clientId: currentUser.clientId,
           replyTo: selectedMessageId,
@@ -136,7 +128,7 @@ export default function ChatWindow() {
   const handleDeleteMessage = (selectedMessageId: string) => {
     if (selectedMessageId) {
       socketRef.current?.emit("message:delete", {
-        roomId: roomId,
+        roomId: currentUser.roomId,
         messageId: selectedMessageId,
       });
 
@@ -156,8 +148,8 @@ export default function ChatWindow() {
 
     // User starts typing
     socketRef.current?.emit("startTyping", {
-      roomId,
-      userName: userName,
+      roomId: currentUser.roomId,
+      userName: currentUser.name,
     });
 
     if (typingTimeoutRef.current) {
@@ -168,7 +160,7 @@ export default function ChatWindow() {
     typingTimeoutRef.current = setTimeout(() => {
       // User stops typing
       socketRef.current?.emit("stopTyping", {
-        roomId,
+        roomId: currentUser.roomId,
       });
       typingTimeoutRef.current = null;
     }, 1000); // stop typing after 1s of no input
@@ -181,10 +173,9 @@ export default function ChatWindow() {
 
     // Socket connection
     socket.on("connect", () => {
-      console.log("in chatWindow Connected, joining room:", roomId);
+      console.log("in chatWindow Connected, joining room:", currentUser.roomId);
       socket.emit("joinroom", {
-        roomId: roomId,
-        userName: userName,
+        roomId: currentUser.roomId,
       });
     });
 
@@ -197,13 +188,6 @@ export default function ChatWindow() {
     socket.on("reply", (msg: MessageType) => {
       setReceivedMessages((prev) => [...prev, msg]);
       console.log("server", msg);
-    });
-
-    // User clientId
-    socket.on("clientId", (clientId: string) => {
-      console.log("current clientId", clientId);
-      dispatch(setUserClientId({ clientId }));
-      socket.off("clientId");
     });
 
     return () => {

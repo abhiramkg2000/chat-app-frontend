@@ -17,3 +17,9 @@ export type RoomUserType = {
 };
 
 export type RoomUsersType = RoomUserType[];
+
+export type UserSliceType = {
+  name: string;
+  roomId: string;
+  clientId: string;
+};

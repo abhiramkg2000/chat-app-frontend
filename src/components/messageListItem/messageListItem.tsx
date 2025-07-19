@@ -40,11 +40,7 @@ const MessageListItem = forwardRef<
 ) {
   const currentUser = useAppSelector((state) => state.user);
 
-  const userName = sessionStorage.getItem("user_name") || "";
-
-  const isSameUser =
-    (message.name === userName && message.clientId === currentUser.clientId) ||
-    (message.name === userName && userName !== "guest");
+  const isSameUser = message.name === currentUser.name;
 
   return (
     <div

@@ -26,8 +26,6 @@ export default function CustomAvatarGroup({
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const userName = sessionStorage.getItem("user_name") || "";
-
   const handleOpen = (event: any) => {
     setAnchorEl(event.currentTarget);
     setOpen(true);
@@ -40,12 +38,7 @@ export default function CustomAvatarGroup({
 
   // Filter out current user
   const otherUsers = fetchedUsers.filter((user) => {
-    if (user.name !== userName) {
-      return true;
-    } else if (
-      user.name === "guest" &&
-      user.clientId !== currentUser.clientId
-    ) {
+    if (user.name !== currentUser.name) {
       return true;
     } else {
       return false;

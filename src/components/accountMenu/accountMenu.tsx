@@ -11,13 +11,15 @@ import Logout from "@mui/icons-material/Logout";
 
 import SnackBar from "@/components/snackbar/snackbar";
 
-import { resetUser } from "@/store/users/usersSlice";
-import { useAppDispatch } from "@/hooks/storeHooks";
+import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
 import { disconnectSocket } from "@/hooks/socketClient";
+import { resetUser } from "@/store/users/usersSlice";
 
 import "./accountMenu.scss";
 
 export default function AccountMenu() {
+  const currentUser = useAppSelector((state) => state.user);
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -26,8 +28,6 @@ export default function AccountMenu() {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
-
-  const userName = sessionStorage.getItem("user_name") || "";
 
   const handleLogout = async () => {
     try {
@@ -82,7 +82,7 @@ export default function AccountMenu() {
       <Box className="account-menu">
         <IconButton disableRipple={true} sx={{ padding: 0 }}>
           <Avatar className="current-user-avatar" onClick={handleMenuClick}>
-            {userName.slice(0, 2)}
+            {currentUser.name.slice(0, 2)}
           </Avatar>
         </IconButton>
       </Box>

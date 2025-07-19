@@ -15,6 +15,9 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import SnackBar from "@/components/snackbar/snackbar";
 
+import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
+import { setCurrentRoomId } from "@/store/users/usersSlice";
+
 import {
   USER_NAME_REGEX,
   USER_PASSWORD_REGEX,
@@ -27,6 +30,8 @@ import {
 import "./loginForm.scss";
 
 export default function LoginForm() {
+  const currentUser = useAppSelector((state) => state.user);
+
   const [userName, setUserName] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [roomId, setRoomId] = useState("");
@@ -41,11 +46,12 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const handleRoomGeneration = () => {
     const unique_Id = uuidv4();
     setRoomId(unique_Id);
-    sessionStorage.setItem("room_id", unique_Id);
+    dispatch(setCurrentRoomId({ roomId: unique_Id }));
   };
 
   const handleRoomJoin = () => {
@@ -96,7 +102,7 @@ export default function LoginForm() {
         console.log("room exists in backend");
         setSnackbarOpen(true);
         setIsValidRoom(true);
-      } else if (roomId === sessionStorage.getItem("room_id")) {
+      } else if (roomId === currentUser.roomId) {
         console.log("room is a generated one");
         setSnackbarOpen(true);
         setIsValidRoom(true);
@@ -125,6 +131,7 @@ export default function LoginForm() {
         body: JSON.stringify({
           name: userName,
           password: userPassword,
+          roomId: roomId,
         }),
       });
 
@@ -145,8 +152,7 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (isValidRoom) {
-      sessionStorage.setItem("room_id", roomId);
-      sessionStorage.setItem("user_name", userName);
+      dispatch(setCurrentRoomId({ roomId }));
 
       setUserName("");
       setUserPassword("");

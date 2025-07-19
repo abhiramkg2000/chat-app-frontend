@@ -10,17 +10,24 @@ import AccountMenu from "@/components/accountMenu/accountMenu";
 import CustomAvatarGroup from "@/components/customAvatarGroup/customAvatarGroup";
 
 import { getSocket } from "@/hooks/socketClient";
+import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
+import {
+  setUserName,
+  setCurrentRoomId,
+  setUserClientId,
+} from "@/store/users/usersSlice";
 
-import { RoomUsersType } from "@/types/commonTypes";
+import { RoomUsersType, UserSliceType } from "@/types/commonTypes";
 
 import "./navBar.scss";
 
 export default function NavBar() {
+  const currentUser = useAppSelector((state) => state.user);
+
   const [isCopied, setIsCopied] = useState(false);
   const [fetchedUsers, setFetchedUsers] = useState<RoomUsersType>([]);
 
-  const userName = sessionStorage.getItem("user_name") || "guest";
-  const roomId = sessionStorage.getItem("room_id") || "";
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     // Connect to the NestJS WebSocket gateway
@@ -28,12 +35,11 @@ export default function NavBar() {
 
     // Socket connection
     socket.on("connect", () => {
-      console.log("in navbar Connected, joining room:", roomId);
+      console.log("in navbar Connected, joining room:", currentUser.roomId);
 
       // Emit joinroom here too (same as in chatWindow)
       socket.emit("joinroom", {
-        roomId,
-        userName: userName,
+        roomId: currentUser.roomId,
       });
     });
 
@@ -41,6 +47,17 @@ export default function NavBar() {
     socket.on("users", (users: RoomUsersType) => {
       console.log("fetched users", users);
       setFetchedUsers(users);
+    });
+
+    // User Info
+    socket.on("user:info", (userInfo: UserSliceType) => {
+      console.log("fetched user Info", userInfo);
+
+      dispatch(setUserName({ name: userInfo.name }));
+      dispatch(setCurrentRoomId({ roomId: userInfo.roomId }));
+      dispatch(setUserClientId({ clientId: userInfo.clientId }));
+
+      socket.off("user:info");
     });
 
     return () => {
@@ -53,14 +70,16 @@ export default function NavBar() {
     <AppBar className="navbar">
       <Box className="user-profile-container">
         <AccountMenu />
-        <h2 className="greeting-header">Welcome {userName + "!"}</h2>
+        <h2 className="greeting-header">Welcome {currentUser.name + "!"}</h2>
       </Box>
       <Box className="room-id-container">
         <Typography variant="subtitle1">Room ID:</Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography variant="body2">{roomId}</Typography>
+          <Typography variant="body2">{currentUser.roomId}</Typography>
           <Tooltip
-            title={!isCopied ? "copy to clipboard" : "copied " + roomId}
+            title={
+              !isCopied ? "copy to clipboard" : "copied " + currentUser.roomId
+            }
             arrow
             slotProps={{ tooltip: { sx: { fontSize: "0.8rem" } } }}
           >
@@ -68,7 +87,7 @@ export default function NavBar() {
               className="copy-icon"
               onClick={() => {
                 setIsCopied(true);
-                navigator.clipboard.writeText(roomId);
+                navigator.clipboard.writeText(currentUser.roomId);
               }}
             />
           </Tooltip>
