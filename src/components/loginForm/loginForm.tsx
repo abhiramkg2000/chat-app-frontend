@@ -169,7 +169,7 @@ export default function LoginForm() {
         router.push("/chats");
       }, 500);
     }
-  }, [isValidRoom]);
+  }, [isValidRoom, roomId, router, dispatch]);
 
   return (
     <>

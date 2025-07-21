@@ -120,7 +120,13 @@ export default function MessageList({
 
       setUnreadCount((prev) => prev + 1);
     }
-  }, [messages.length]);
+  }, [
+    messages.length,
+    currentUser.clientId,
+    isAtBottom,
+    messages,
+    unreadCount,
+  ]);
 
   return (
     <List className="message-list" ref={listRef}>

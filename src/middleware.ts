@@ -26,7 +26,7 @@ export async function middleware(req: NextRequest) {
     await jwtVerify(token, secret);
     console.log("Token success");
     return NextResponse.next();
-  } catch (err) {
+  } catch (_err) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = "/auth/login";
     console.log("Token failed");

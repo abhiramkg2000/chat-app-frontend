@@ -195,7 +195,7 @@ export default function ChatWindow() {
         typingTimeoutRef.current = null;
       }
     };
-  }, []);
+  }, [currentUser.roomId]);
 
   useEffect(() => {
     if (!currentUser.clientId) return;

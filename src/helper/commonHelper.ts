@@ -1,9 +1,9 @@
 export const getEmojiFromUnified = (emojiUnified: string) => {
-  let symbol = emojiUnified.split("-");
-  let codesArray: Array<string> = [];
+  const symbol = emojiUnified.split("-");
+  const codesArray: Array<string> = [];
 
   symbol.forEach((element) => codesArray.push("0x" + element));
-  let emoji = String.fromCodePoint(
+  const emoji = String.fromCodePoint(
     ...codesArray.map((code) => parseInt(code, 16))
   );
   return emoji;

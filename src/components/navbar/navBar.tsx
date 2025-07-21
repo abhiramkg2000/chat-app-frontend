@@ -64,7 +64,7 @@ export default function NavBar() {
       socket.off("connect");
       socket.off("users");
     };
-  }, []);
+  }, [currentUser.roomId, dispatch]);
 
   return (
     <AppBar className="navbar">
