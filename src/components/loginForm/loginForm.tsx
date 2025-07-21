@@ -165,9 +165,10 @@ export default function LoginForm() {
         roomId: false,
       });
 
-      setTimeout(() => {
-        router.push("/chats");
-      }, 500);
+      // setTimeout(() => {
+      console.log("routing to chats");
+      router.push("/chats");
+      // }, 500);
     }
   }, [isValidRoom, roomId, router, dispatch]);
 
