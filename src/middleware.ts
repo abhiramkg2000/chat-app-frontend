@@ -26,10 +26,10 @@ export async function middleware(req: NextRequest) {
     await jwtVerify(token, secret);
     console.log("Token success");
     return NextResponse.next();
-  } catch (_err) {
+  } catch (err) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = "/auth/login";
-    console.log("Token failed");
+    console.log("Token failed", err);
     return NextResponse.redirect(loginUrl);
   }
 }
