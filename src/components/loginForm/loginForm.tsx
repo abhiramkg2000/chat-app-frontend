@@ -25,6 +25,7 @@ import {
   USER_NAME_HELPER_TEXT,
   USER_PASSWORD_HELPER_TEXT,
   ROOM_ID_HELPER_TEXT,
+  API_URL,
 } from "@/constants/commonConstants";
 
 import "./loginForm.scss";
@@ -88,7 +89,7 @@ export default function LoginForm() {
 
   const validateRoomId = async () => {
     try {
-      const res = await fetch("http://localhost:3001/rooms", {
+      const res = await fetch(`${API_URL}/rooms`, {
         headers: {
           "ngrok-skip-browser-warning": "true",
         },
@@ -121,7 +122,7 @@ export default function LoginForm() {
 
   const validateUserCredentials = async () => {
     try {
-      const res = await fetch("http://localhost:3001/user/login", {
+      const res = await fetch(`${API_URL}/user/login`, {
         method: "POST",
         credentials: "include",
         headers: {

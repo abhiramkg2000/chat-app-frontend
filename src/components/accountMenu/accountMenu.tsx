@@ -15,6 +15,8 @@ import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
 import { disconnectSocket } from "@/hooks/socketClient";
 import { resetUser } from "@/store/users/usersSlice";
 
+import { API_URL } from "@/constants/commonConstants";
+
 import "./accountMenu.scss";
 
 export default function AccountMenu() {
@@ -31,7 +33,7 @@ export default function AccountMenu() {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:3001/user/logout", {
+      const res = await fetch(`${API_URL}/user/logout`, {
         method: "POST",
         credentials: "include",
         headers: {

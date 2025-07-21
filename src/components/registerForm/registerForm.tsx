@@ -19,6 +19,7 @@ import {
   USER_PASSWORD_REGEX,
   USER_NAME_HELPER_TEXT,
   USER_PASSWORD_HELPER_TEXT,
+  API_URL,
 } from "@/constants/commonConstants";
 
 import "./registerForm.scss";
@@ -66,7 +67,7 @@ export default function RegisterForm() {
       USER_PASSWORD_REGEX.test(userPassword)
     ) {
       try {
-        const res = await fetch("http://localhost:3001/user/register", {
+        const res = await fetch(`${API_URL}/user/register`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

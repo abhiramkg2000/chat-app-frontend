@@ -26,3 +26,7 @@ export const USER_PASSWORD_HELPER_TEXT =
 
 export const ROOM_ID_HELPER_TEXT =
   "Room ID can contain only letters, digits and hyphen";
+
+// API URL
+export const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
