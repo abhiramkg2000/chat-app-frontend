@@ -56,9 +56,9 @@ export default function AccountMenu() {
     handleMenuClose();
     disconnectSocket();
 
-    setTimeout(() => {
-      router.push("/auth/login");
-    }, 500);
+    // setTimeout(() => {
+    router.push("/auth/login");
+    // }, 500);
 
     setTimeout(() => {
       dispatch(resetUser());

@@ -12,7 +12,6 @@ export const getSocket = (): Socket => {
     socket = io(`${API_URL}`, {
       transports: ["websocket"],
       withCredentials: true,
-      reconnectionAttempts: 5,
       // reconnection: true,
     });
   }
