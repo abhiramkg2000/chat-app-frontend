@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { useEffect, ReactNode } from "react";
 
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -21,6 +21,12 @@ export default function Auth({ children }: { children: ReactNode }) {
       router.push("/auth/login");
     }
   };
+
+  useEffect(() => {
+    router.prefetch("/auth/register");
+    router.prefetch("/auth/login");
+    console.log("Prefetch for /auth/login completed");
+  }, [router]);
 
   return (
     <Box

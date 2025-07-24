@@ -20,7 +20,7 @@ export const MESSAGE_REGEX = /^(?!\s*$)[\s\S]+$/;
 
 // Helper text
 export const USER_NAME_HELPER_TEXT =
-  "Username can contain only letters, digits and underscore";
+  "Username should be atleast 3 characters long and can contain only letters, digits and underscore";
 export const USER_PASSWORD_HELPER_TEXT =
   "Password should contain:\n1. At least one lowercase letter\n2. At least one uppercase letter\n3. At least one digit\n4. At least one special character from:@$!%*?&\n5. Minimum 8 characters";
 
