@@ -58,7 +58,6 @@ export default function ChatWindow() {
   const handleSendMessage = () => {
     if (MESSAGE_REGEX.test(userMessage)) {
       socketRef.current?.emit("message:add", {
-        roomId: currentUser.roomId,
         message: {
           value: userMessage,
           clientId: currentUser.clientId,
@@ -85,7 +84,6 @@ export default function ChatWindow() {
       // Checks if the message was actually edited
       if (userMessage !== editMessage.value) {
         socketRef.current?.emit("message:edit", {
-          roomId: currentUser.roomId,
           message: {
             ...editMessage,
             value: userMessage,
@@ -106,7 +104,6 @@ export default function ChatWindow() {
   const handleReplyToMessage = () => {
     if (MESSAGE_REGEX.test(userMessage)) {
       socketRef.current?.emit("message:replyToMessage", {
-        roomId: currentUser.roomId,
         message: {
           value: userMessage,
           clientId: currentUser.clientId,
@@ -128,7 +125,6 @@ export default function ChatWindow() {
   const handleDeleteMessage = (selectedMessageId: string) => {
     if (selectedMessageId) {
       socketRef.current?.emit("message:delete", {
-        roomId: currentUser.roomId,
         messageId: selectedMessageId,
       });
 
@@ -168,10 +164,8 @@ export default function ChatWindow() {
 
     // Socket connection
     socket.on("connect", () => {
-      console.log("in chatWindow Connected, joining room:", currentUser.roomId);
-      socket.emit("joinroom", {
-        roomId: currentUser.roomId,
-      });
+      console.log("in chatWindow Connected, joining room");
+      socket.emit("joinroom");
     });
 
     // Prefetch messages
@@ -195,7 +189,7 @@ export default function ChatWindow() {
         typingTimeoutRef.current = null;
       }
     };
-  }, [currentUser.roomId]);
+  }, []);
 
   useEffect(() => {
     if (!currentUser.clientId) return;

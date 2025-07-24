@@ -11,13 +11,8 @@ import CustomAvatarGroup from "@/components/customAvatarGroup/customAvatarGroup"
 
 import { getSocket } from "@/hooks/socketClient";
 import { useAppSelector, useAppDispatch } from "@/hooks/storeHooks";
-import {
-  setUserName,
-  setCurrentRoomId,
-  setUserClientId,
-} from "@/store/users/usersSlice";
 
-import { RoomUsersType, UserSliceType } from "@/types/commonTypes";
+import { RoomUsersType } from "@/types/commonTypes";
 
 import "./navBar.scss";
 
@@ -35,12 +30,10 @@ export default function NavBar() {
 
     // Socket connection
     socket.on("connect", () => {
-      console.log("in navbar Connected, joining room:", currentUser.roomId);
+      console.log("in navbar Connected, joining room");
 
       // Emit joinroom here too (same as in chatWindow)
-      socket.emit("joinroom", {
-        roomId: currentUser.roomId,
-      });
+      socket.emit("joinroom");
     });
 
     // Users in a room
@@ -49,22 +42,11 @@ export default function NavBar() {
       setFetchedUsers(users);
     });
 
-    // User Info
-    socket.on("user:info", (userInfo: UserSliceType) => {
-      console.log("fetched user Info", userInfo);
-
-      dispatch(setUserName({ name: userInfo.name }));
-      dispatch(setCurrentRoomId({ roomId: userInfo.roomId }));
-      dispatch(setUserClientId({ clientId: userInfo.clientId }));
-
-      socket.off("user:info");
-    });
-
     return () => {
       socket.off("connect");
       socket.off("users");
     };
-  }, [currentUser.roomId, dispatch]);
+  }, [dispatch]);
 
   return (
     <AppBar className="navbar">
