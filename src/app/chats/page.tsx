@@ -43,9 +43,9 @@ export default function Chats() {
   return (
     <>
       {loading &&
-      currentUser.name &&
-      currentUser.roomId &&
-      currentUser.clientId ? (
+      !currentUser.name &&
+      !currentUser.roomId &&
+      !currentUser.clientId ? (
         <AuthenticationCheckText />
       ) : (
         <>
