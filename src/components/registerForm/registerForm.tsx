@@ -102,60 +102,66 @@ export default function RegisterForm() {
       <Box className="register-page">
         <Card className="register-card">
           <CardContent className="register-card-content">
-            <TextField
-              className="user-name-input"
-              name="user Name"
-              label="User Name"
-              value={userName}
-              // autoComplete="off"
-              variant="outlined"
-              onChange={handleUserNameChange}
-              onBlur={() => setTouched((prev) => ({ ...prev, username: true }))}
-              error={touched.username && !USER_NAME_REGEX.test(userName)}
-              helperText={
-                touched.username && !USER_NAME_REGEX.test(userName)
-                  ? USER_NAME_HELPER_TEXT
-                  : ""
-              }
-              required
-            />
-            <TextField
-              className="password-input"
-              name="Password"
-              type={showPassword ? "text" : "password"}
-              label="Password"
-              value={userPassword}
-              autoComplete="off"
-              variant="outlined"
-              onChange={handleUserPasswordChange}
-              onBlur={() => setTouched((prev) => ({ ...prev, password: true }))}
-              error={
-                touched.password && !USER_PASSWORD_REGEX.test(userPassword)
-              }
-              helperText={
-                touched.password && !USER_PASSWORD_REGEX.test(userPassword)
-                  ? USER_PASSWORD_HELPER_TEXT
-                  : ""
-              }
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        onMouseUp={handleMouseUpPassword}
-                        disableRipple={true}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              required
-            />
+            <form>
+              <TextField
+                className="user-name-input"
+                name="user Name"
+                label="User Name"
+                value={userName}
+                // autoComplete="off"
+                variant="outlined"
+                onChange={handleUserNameChange}
+                onBlur={() =>
+                  setTouched((prev) => ({ ...prev, username: true }))
+                }
+                error={touched.username && !USER_NAME_REGEX.test(userName)}
+                helperText={
+                  touched.username && !USER_NAME_REGEX.test(userName)
+                    ? USER_NAME_HELPER_TEXT
+                    : ""
+                }
+                required
+              />
+              <TextField
+                className="password-input"
+                name="Password"
+                type={showPassword ? "text" : "password"}
+                label="Password"
+                value={userPassword}
+                autoComplete="off"
+                variant="outlined"
+                onChange={handleUserPasswordChange}
+                onBlur={() =>
+                  setTouched((prev) => ({ ...prev, password: true }))
+                }
+                error={
+                  touched.password && !USER_PASSWORD_REGEX.test(userPassword)
+                }
+                helperText={
+                  touched.password && !USER_PASSWORD_REGEX.test(userPassword)
+                    ? USER_PASSWORD_HELPER_TEXT
+                    : ""
+                }
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          onMouseUp={handleMouseUpPassword}
+                          disableRipple={true}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                required
+              />
+            </form>
           </CardContent>
           <CardActions className="register-card-actions">
             <Button

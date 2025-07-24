@@ -177,77 +177,83 @@ export default function LoginForm() {
       <Box className="login-page">
         <Card className="login-card">
           <CardContent className="login-card-content">
-            <TextField
-              className="user-name-input"
-              name="user Name"
-              label="User Name"
-              value={userName}
-              // autoComplete="off"
-              variant="outlined"
-              onChange={handleUserNameChange}
-              onBlur={() => setTouched((prev) => ({ ...prev, username: true }))}
-              error={touched.username && !USER_NAME_REGEX.test(userName)}
-              helperText={
-                touched.username && !USER_NAME_REGEX.test(userName)
-                  ? USER_NAME_HELPER_TEXT
-                  : ""
-              }
-              required
-            />
-            <TextField
-              className="password-input"
-              name="Password"
-              type={showPassword ? "text" : "password"}
-              label="Password"
-              value={userPassword}
-              autoComplete="off"
-              variant="outlined"
-              onChange={handleUserPasswordChange}
-              onBlur={() => setTouched((prev) => ({ ...prev, password: true }))}
-              error={
-                touched.password && !USER_PASSWORD_REGEX.test(userPassword)
-              }
-              helperText={
-                touched.password && !USER_PASSWORD_REGEX.test(userPassword)
-                  ? USER_PASSWORD_HELPER_TEXT
-                  : ""
-              }
-              required
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={handleShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        onMouseUp={handleMouseUpPassword}
-                        disableRipple={true}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-            />
-            <TextField
-              className="room-id-input"
-              name="Room ID"
-              label="Room ID"
-              value={roomId}
-              autoComplete="off"
-              variant="outlined"
-              onChange={handleRoomIdChange}
-              onBlur={() => setTouched((prev) => ({ ...prev, roomId: true }))}
-              error={touched.roomId && !ROOM_ID_REGEX.test(roomId)}
-              helperText={
-                touched.roomId && !ROOM_ID_REGEX.test(roomId)
-                  ? ROOM_ID_HELPER_TEXT
-                  : ""
-              }
-              required
-            />
+            <form>
+              <TextField
+                className="user-name-input"
+                name="user Name"
+                label="User Name"
+                value={userName}
+                // autoComplete="off"
+                variant="outlined"
+                onChange={handleUserNameChange}
+                onBlur={() =>
+                  setTouched((prev) => ({ ...prev, username: true }))
+                }
+                error={touched.username && !USER_NAME_REGEX.test(userName)}
+                helperText={
+                  touched.username && !USER_NAME_REGEX.test(userName)
+                    ? USER_NAME_HELPER_TEXT
+                    : ""
+                }
+                required
+              />
+              <TextField
+                className="password-input"
+                name="Password"
+                type={showPassword ? "text" : "password"}
+                label="Password"
+                value={userPassword}
+                autoComplete="off"
+                variant="outlined"
+                onChange={handleUserPasswordChange}
+                onBlur={() =>
+                  setTouched((prev) => ({ ...prev, password: true }))
+                }
+                error={
+                  touched.password && !USER_PASSWORD_REGEX.test(userPassword)
+                }
+                helperText={
+                  touched.password && !USER_PASSWORD_REGEX.test(userPassword)
+                    ? USER_PASSWORD_HELPER_TEXT
+                    : ""
+                }
+                required
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          onMouseUp={handleMouseUpPassword}
+                          disableRipple={true}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+              <TextField
+                className="room-id-input"
+                name="Room ID"
+                label="Room ID"
+                value={roomId}
+                autoComplete="off"
+                variant="outlined"
+                onChange={handleRoomIdChange}
+                onBlur={() => setTouched((prev) => ({ ...prev, roomId: true }))}
+                error={touched.roomId && !ROOM_ID_REGEX.test(roomId)}
+                helperText={
+                  touched.roomId && !ROOM_ID_REGEX.test(roomId)
+                    ? ROOM_ID_HELPER_TEXT
+                    : ""
+                }
+                required
+              />
+            </form>
           </CardContent>
           <CardActions className="login-card-actions">
             <Button

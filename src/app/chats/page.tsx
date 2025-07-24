@@ -7,9 +7,13 @@ import NavBar from "@/components/navbar/navBar";
 import ChatWindow from "@/modules/chatWindow/chatWindow";
 import AuthenticationCheckText from "@/components/authenticationCheckText/authenticationCheckText";
 
+import { useAppSelector } from "@/hooks/storeHooks";
+
 import { API_URL } from "@/constants/commonConstants";
 
 export default function Chats() {
+  const currentUser = useAppSelector((state) => state.user);
+
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
@@ -38,7 +42,10 @@ export default function Chats() {
 
   return (
     <>
-      {loading ? (
+      {loading &&
+      currentUser.name &&
+      currentUser.roomId &&
+      currentUser.clientId ? (
         <AuthenticationCheckText />
       ) : (
         <>
