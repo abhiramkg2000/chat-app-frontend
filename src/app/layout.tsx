@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 
 import StoreProvider from "@/store/storeProvider";
 
+import ChatDotsIcon from "../assets/images/chat-dots.svg";
+
 import "./globals.scss";
 
 export const metadata: Metadata = {
@@ -16,6 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href={ChatDotsIcon.src} />
+      </head>
       <body>
         <StoreProvider>{children}</StoreProvider>
       </body>
