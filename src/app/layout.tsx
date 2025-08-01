@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 
 import StoreProvider from "@/store/storeProvider";
 
-import ChatDotsIcon from "../assets/images/chat-dots.svg";
+import ChatDotsIcon from "../assets/icons/chat-dots.svg";
 
 import "./globals.scss";
 
 export const metadata: Metadata = {
-  title: "chat_app",
+  title: "Chat app",
   description: "chat_app",
 };
 
