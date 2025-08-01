@@ -9,6 +9,8 @@ import ReplyIcon from "@mui/icons-material/Reply";
 
 import { useAppSelector } from "@/hooks/storeHooks";
 
+import { formatEditedAt } from "@/helper/commonHelper";
+
 import { INITIAL_EDIT_MESSAGE_STATE } from "@/constants/commonConstants";
 
 import { MessageType } from "@/types/commonTypes";
@@ -132,7 +134,9 @@ const RepliedMessageItem = forwardRef<
                   : "other-user-message-edited-at"
               }`}
               primary={
-                message.isEdited ? `Edited at: ${message.editedAt} ` : ""
+                message.isEdited
+                  ? `Edited at: ${formatEditedAt(message.updatedAt)} `
+                  : ""
               }
               primaryTypographyProps={{ variant: "body2" }}
             />

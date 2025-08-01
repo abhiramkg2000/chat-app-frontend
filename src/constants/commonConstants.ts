@@ -4,7 +4,8 @@ export const INITIAL_EDIT_MESSAGE_STATE = {
   clientId: "",
   messageId: "",
   isEdited: false,
-  editedAt: "",
+  createdAt: "",
+  updatedAt: "",
   isDeleted: false,
   replyTo: "",
 };
