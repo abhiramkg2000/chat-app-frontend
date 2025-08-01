@@ -15,9 +15,9 @@ import { useAppSelector } from "@/hooks/storeHooks";
 import { getSocket } from "@/hooks/socketClient";
 
 import {
-  formatEditedAt,
   formatReplyToText,
   formatTypingIndicatorText,
+  groupMessagesByDate,
 } from "@/helper/commonHelper";
 
 import {
@@ -54,6 +54,7 @@ export default function ChatWindow() {
       ?.value || "";
 
   const truncatedRepliedTo = formatReplyToText(repliedToText);
+  const groupedMessages = groupMessagesByDate(receivedMessages);
 
   const handleSendMessage = () => {
     if (MESSAGE_REGEX.test(userMessage)) {
@@ -85,10 +86,8 @@ export default function ChatWindow() {
       if (userMessage !== editMessage.value) {
         socketRef.current?.emit("message:edit", {
           message: {
-            ...editMessage,
+            messageId: editMessage.messageId,
             value: userMessage,
-            isEdited: true,
-            editedAt: formatEditedAt(),
           },
         });
       }
@@ -226,7 +225,7 @@ export default function ChatWindow() {
     <div className="chat-window">
       <div className="message-list-container">
         <MessageList
-          messages={receivedMessages}
+          messages={groupedMessages}
           selectedMessageId={selectedMessageId}
           setSelectedMessageId={setSelectedMessageId}
           setIsEditing={setIsEditing}

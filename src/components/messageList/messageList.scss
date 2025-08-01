@@ -26,7 +26,13 @@
   .unread-message-banner {
     text-align: center;
     margin: 10px 0;
-    padding: 8px;
+    color: variables.$silver;
+    font-size: 14px;
+  }
+
+  .date-separator {
+    text-align: center;
+    margin: 10px 0;
     color: variables.$silver;
     font-size: 14px;
   }

@@ -9,7 +9,7 @@ import RepliedMessageItem from "../repliedMessageItem/repliedMessageItem";
 
 import { useAppSelector } from "@/hooks/storeHooks";
 
-import { MessageType, MessageListType } from "@/types/commonTypes";
+import { MessageType, GroupedMessageType } from "@/types/commonTypes";
 
 import "./messageList.scss";
 
@@ -22,7 +22,7 @@ export default function MessageList({
   handleEditingMessage,
   handleDeleteMessage,
 }: {
-  messages: MessageListType;
+  messages: GroupedMessageType[];
   selectedMessageId: string;
   setSelectedMessageId: Dispatch<SetStateAction<string>>;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
@@ -55,7 +55,7 @@ export default function MessageList({
       setTimeout(() => {
         setUnreadCount(0);
         setFirstUnreadMessageId(null);
-      }, 3000);
+      }, 5000);
     }
   };
 
@@ -82,7 +82,7 @@ export default function MessageList({
           setUnreadCount(0);
           setFirstUnreadMessageId(null);
           unreadTimeoutRef.current = null;
-        }, 3000);
+        }, 5000);
       }
     };
 
@@ -102,7 +102,8 @@ export default function MessageList({
   useEffect(() => {
     if (!messages.length) return;
     const lastMessage = messages[messages.length - 1];
-    const isCurrentUserMessage = lastMessage.clientId === currentUser.clientId;
+    const isCurrentUserMessage =
+      lastMessage.message?.clientId === currentUser.clientId;
 
     if (isAtBottom || isCurrentUserMessage) {
       console.log("lastMessageRef: ", lastMessageRef.current);
@@ -115,84 +116,88 @@ export default function MessageList({
       setFirstUnreadMessageId(null);
     } else {
       if (unreadCount === 0) {
-        setFirstUnreadMessageId(lastMessage.messageId);
+        setFirstUnreadMessageId(lastMessage.message?.messageId!);
       }
 
       setUnreadCount((prev) => prev + 1);
     }
-  }, [
-    messages.length,
-    currentUser.clientId,
-    isAtBottom,
-    messages,
-    unreadCount,
-  ]);
+  }, [messages.length]);
 
   return (
     <List className="message-list" ref={listRef}>
       {messages.map((obj, index) => {
-        const isUnreadMarker = obj.messageId === firstUnreadMessageId;
+        if (obj.type === "date" && obj.date) {
+          return (
+            <div key={`date-${index}`} className="date-separator">
+              {obj.date}
+            </div>
+          );
+        } else if (obj.type === "message" && obj.message) {
+          const isUnreadMarker =
+            obj.message?.messageId === firstUnreadMessageId;
 
-        // Create ref for each message if it doesn't exist yet
-        if (!messageRefs.current[obj.messageId]) {
-          messageRefs.current[obj.messageId] = null;
+          // Create ref for each message if it doesn't exist yet
+          if (!messageRefs.current[obj.message.messageId]) {
+            messageRefs.current[obj.message.messageId] = null;
+          }
+
+          return (
+            <div key={index}>
+              {isUnreadMarker && unreadCount > 0 && (
+                <Divider
+                  variant="middle"
+                  component={"li"}
+                  className="unread-message-banner"
+                >
+                  {unreadCount} unread message{unreadCount > 1 ? "s" : ""}
+                </Divider>
+              )}
+
+              {obj.message.replyTo ? (
+                <RepliedMessageItem
+                  key={index}
+                  message={obj.message}
+                  selectedMessageId={selectedMessageId}
+                  setSelectedMessageId={setSelectedMessageId}
+                  setIsEditing={setIsEditing}
+                  setIsReplying={setIsReplying}
+                  handleEditingMessage={handleEditingMessage}
+                  handleDeleteMessage={handleDeleteMessage}
+                  repliedToMessage={
+                    messages.find(
+                      (msg) => msg.message?.messageId === obj.message?.replyTo
+                    )?.message?.value || ""
+                  }
+                  ref={(el) => {
+                    messageRefs.current[obj.message?.messageId!] = el;
+                    if (index === messages.length - 1) {
+                      lastMessageRef.current = el;
+                    }
+                  }}
+                  // Pass the map of refs to scroll to replied message
+                  messageRefs={messageRefs.current}
+                />
+              ) : (
+                <MessageListItem
+                  key={index}
+                  message={obj.message}
+                  selectedMessageId={selectedMessageId}
+                  setSelectedMessageId={setSelectedMessageId}
+                  setIsEditing={setIsEditing}
+                  setIsReplying={setIsReplying}
+                  handleEditingMessage={handleEditingMessage}
+                  handleDeleteMessage={handleDeleteMessage}
+                  ref={(el) => {
+                    messageRefs.current[obj.message?.messageId!] = el;
+                    if (index === messages.length - 1) {
+                      lastMessageRef.current = el;
+                    }
+                  }}
+                />
+              )}
+            </div>
+          );
         }
-
-        return (
-          <div key={index}>
-            {isUnreadMarker && unreadCount > 0 && (
-              <Divider
-                variant="middle"
-                component={"li"}
-                className="unread-message-banner"
-              >
-                {unreadCount} unread message{unreadCount > 1 ? "s" : ""}
-              </Divider>
-            )}
-
-            {obj.replyTo ? (
-              <RepliedMessageItem
-                key={index}
-                message={obj}
-                selectedMessageId={selectedMessageId}
-                setSelectedMessageId={setSelectedMessageId}
-                setIsEditing={setIsEditing}
-                setIsReplying={setIsReplying}
-                handleEditingMessage={handleEditingMessage}
-                handleDeleteMessage={handleDeleteMessage}
-                repliedToMessage={
-                  messages.find((msg) => msg.messageId === obj.replyTo)
-                    ?.value || ""
-                }
-                ref={(el) => {
-                  messageRefs.current[obj.messageId] = el;
-                  if (index === messages.length - 1) {
-                    lastMessageRef.current = el;
-                  }
-                }}
-                // Pass the map of refs to scroll to replied message
-                messageRefs={messageRefs.current}
-              />
-            ) : (
-              <MessageListItem
-                key={index}
-                message={obj}
-                selectedMessageId={selectedMessageId}
-                setSelectedMessageId={setSelectedMessageId}
-                setIsEditing={setIsEditing}
-                setIsReplying={setIsReplying}
-                handleEditingMessage={handleEditingMessage}
-                handleDeleteMessage={handleDeleteMessage}
-                ref={(el) => {
-                  messageRefs.current[obj.messageId] = el;
-                  if (index === messages.length - 1) {
-                    lastMessageRef.current = el;
-                  }
-                }}
-              />
-            )}
-          </div>
-        );
       })}
       {unreadCount > 0 && !isAtBottom && (
         <li

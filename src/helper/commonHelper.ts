@@ -1,3 +1,7 @@
+import { format, isToday, isYesterday } from "date-fns";
+
+import { MessageType, GroupedMessageType } from "@/types/commonTypes";
+
 export const getEmojiFromUnified = (emojiUnified: string) => {
   const symbol = emojiUnified.split("-");
   const codesArray: Array<string> = [];
@@ -9,9 +13,10 @@ export const getEmojiFromUnified = (emojiUnified: string) => {
   return emoji;
 };
 
-export const formatEditedAt = () => {
-  const timestamp = Date.now();
-  const date = new Date(timestamp);
+export const formatEditedAt = (editedDate: Date | string | undefined) => {
+  if (!editedDate) return "";
+
+  const date = new Date(editedDate);
 
   const day = String(date.getDate()).padStart(2, "0");
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
@@ -56,4 +61,51 @@ export function formatTypingIndicatorText(
   } else {
     return `${names} ${usersTyping.length === 1 ? "is" : "are"} typing...`;
   }
+}
+
+// Helper to convert UTC date string to local Date object
+function convertUTCToLocal(dateInput: string | Date | undefined): Date {
+  if (!dateInput) return new Date();
+
+  const utcDate =
+    typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+
+  return new Date(
+    utcDate.getUTCFullYear(),
+    utcDate.getUTCMonth(),
+    utcDate.getUTCDate(),
+    utcDate.getUTCHours(),
+    utcDate.getUTCMinutes(),
+    utcDate.getUTCSeconds(),
+    utcDate.getUTCMilliseconds()
+  );
+}
+
+export function groupMessagesByDate(messages: MessageType[]) {
+  const result: GroupedMessageType[] = [];
+  let currentDateKey = "";
+
+  messages.forEach((msg) => {
+    const localDate = convertUTCToLocal(msg.createdAt || "");
+    const msgDateKey = format(localDate, "yyyy-MM-dd"); // for comparison
+
+    let readableDate = "";
+
+    if (isToday(localDate)) {
+      readableDate = "Today";
+    } else if (isYesterday(localDate)) {
+      readableDate = "Yesterday";
+    } else {
+      readableDate = format(localDate, "dd-MM-yyyy");
+    }
+
+    if (msgDateKey !== currentDateKey) {
+      result.push({ type: "date", date: readableDate });
+      currentDateKey = msgDateKey;
+    }
+
+    result.push({ type: "message", message: msg });
+  });
+
+  return result;
 }
