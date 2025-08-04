@@ -55,7 +55,7 @@ export default function Chats() {
 
     // Socket connection
     socket.on("connect", () => {
-      console.log("in chats Connected, joining room");
+      // console.log("in chats Connected, joining room");
 
       // Emit joinroom here too (same as in chatWindow)
       socket.emit("joinroom");
@@ -63,7 +63,7 @@ export default function Chats() {
 
     // User Info
     socket.on("user:info", (userInfo: UserSliceType) => {
-      console.log("fetched user Info", userInfo);
+      // console.log("fetched user Info", userInfo);
 
       dispatch(setUserName({ name: userInfo.name }));
       dispatch(setCurrentRoomId({ roomId: userInfo.roomId }));

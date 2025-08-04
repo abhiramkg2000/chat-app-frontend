@@ -97,18 +97,18 @@ export default function LoginForm() {
 
       const data = await res.json();
       const rooms: string[] = data.rooms;
-      console.log("room id:", roomId, "rooms:", data);
+      // console.log("room id:", roomId, "rooms:", data);
 
       if (rooms.find((id) => id === roomId)) {
-        console.log("room exists in backend");
+        // console.log("room exists in backend");
         setSnackbarOpen(true);
         setIsValidRoom(true);
       } else if (roomId === currentUser.roomId) {
-        console.log("room is a generated one");
+        // console.log("room is a generated one");
         setSnackbarOpen(true);
         setIsValidRoom(true);
       } else {
-        console.log("no such room exists");
+        // console.log("no such room exists");
         setSnackbarOpen(true);
         setSnackbarMessage(
           "No such room exists, please check the room id or generate a new one"
@@ -137,7 +137,7 @@ export default function LoginForm() {
       });
 
       const data = await res.json();
-      console.log("data", data);
+      // console.log("data", data);
 
       setSnackbarMessage(data.message);
 
@@ -166,7 +166,7 @@ export default function LoginForm() {
       });
 
       // setTimeout(() => {
-      console.log("routing to chats");
+      // console.log("routing to chats");
       router.push("/chats");
       // }, 500);
     }

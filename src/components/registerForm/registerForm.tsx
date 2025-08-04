@@ -80,7 +80,7 @@ export default function RegisterForm() {
         });
 
         const data = await res.json();
-        console.log("data", data);
+        // console.log("data", data);
 
         setSnackbarOpen(true);
         setSnackbarMessage(data.message);

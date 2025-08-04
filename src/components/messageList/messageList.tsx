@@ -78,7 +78,7 @@ export default function MessageList({
       const atBottom =
         listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight <
         threshold;
-      console.log("atBottom", atBottom);
+      // console.log("atBottom", atBottom);
       setIsAtBottom(atBottom);
 
       // Clear unread if user scrolls to bottom
@@ -126,7 +126,7 @@ export default function MessageList({
         setIsAtBottom(atBottom);
 
         if (atBottom || isCurrentUserMessage) {
-          console.log("lastMessageRef: ", lastMessageRef.current);
+          // console.log("lastMessageRef: ", lastMessageRef.current);
           lastMessageRef.current?.scrollIntoView({
             behavior: "smooth",
             block: "start",

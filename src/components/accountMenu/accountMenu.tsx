@@ -43,7 +43,7 @@ export default function AccountMenu() {
       });
 
       const data = await res.json();
-      console.log("Logout response:", data);
+      // console.log("Logout response:", data);
 
       setSnackbarMessage(data.message);
       setSnackbarOpen(true);

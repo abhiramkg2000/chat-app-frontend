@@ -30,7 +30,7 @@ export default function NavBar() {
 
     // Socket connection
     socket.on("connect", () => {
-      console.log("in navbar Connected, joining room");
+      // console.log("in navbar Connected, joining room");
 
       // Emit joinroom here too (same as in chatWindow)
       socket.emit("joinroom");
@@ -38,7 +38,7 @@ export default function NavBar() {
 
     // Users in a room
     socket.on("users", (users: RoomUsersType) => {
-      console.log("fetched users", users);
+      // console.log("fetched users", users);
       setFetchedUsers(users);
     });
 

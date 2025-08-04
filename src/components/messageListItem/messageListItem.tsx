@@ -63,7 +63,7 @@ const MessageListItem = forwardRef<
         onClick={
           !message.isDeleted
             ? () => {
-                console.log("selected message", { ...message });
+                // console.log("selected message", { ...message });
                 setIsReplying(false);
                 setIsEditing(false);
                 handleEditingMessage(INITIAL_EDIT_MESSAGE_STATE);
@@ -129,7 +129,7 @@ const MessageListItem = forwardRef<
               disableRipple={true}
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("same user reply to message", message);
+                // console.log("same user reply to message", message);
                 setIsReplying(true);
                 setIsEditing(false);
                 handleEditingMessage(INITIAL_EDIT_MESSAGE_STATE);
@@ -142,7 +142,7 @@ const MessageListItem = forwardRef<
               disableRipple={true}
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("message to edit", { ...message });
+                // console.log("message to edit", { ...message });
                 setIsEditing(true);
                 handleEditingMessage(message);
                 setIsReplying(false);
@@ -171,7 +171,7 @@ const MessageListItem = forwardRef<
               disableRipple={true}
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("other user reply to message", message);
+                // console.log("other user reply to message", message);
                 setIsReplying(true);
                 setIsEditing(false);
                 handleEditingMessage(INITIAL_EDIT_MESSAGE_STATE);

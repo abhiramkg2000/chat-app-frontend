@@ -92,7 +92,7 @@ export default function ChatWindow() {
         });
       }
 
-      console.log("edited message", { ...editMessage, value: userMessage });
+      // console.log("edited message", { ...editMessage, value: userMessage });
       setUserMessage("");
       setIsEditing(false);
       setEditMessage(INITIAL_EDIT_MESSAGE_STATE);
@@ -110,7 +110,7 @@ export default function ChatWindow() {
         },
       });
 
-      console.log("replied to message", selectedMessageId);
+      // console.log("replied to message", selectedMessageId);
       setUserMessage("");
       setIsReplying(false);
       setSelectedMessageId("");
@@ -127,7 +127,7 @@ export default function ChatWindow() {
         messageId: selectedMessageId,
       });
 
-      console.log("message deleted");
+      // console.log("message deleted");
       setUserMessage("");
       setIsEditing(false);
       setEditMessage(INITIAL_EDIT_MESSAGE_STATE);
@@ -136,7 +136,7 @@ export default function ChatWindow() {
     }
   };
 
-  console.log("set selected message Id", selectedMessageId);
+  // console.log("set selected message Id", selectedMessageId);
 
   const handleTyping = () => {
     if (!socketRef.current) return;
@@ -163,7 +163,7 @@ export default function ChatWindow() {
 
     // Socket connection
     socket.on("connect", () => {
-      console.log("in chatWindow Connected, joining room");
+      // console.log("in chatWindow Connected, joining room");
       socket.emit("joinroom");
     });
 
@@ -175,7 +175,7 @@ export default function ChatWindow() {
     // Listen to messages
     socket.on("reply", (msg: MessageType) => {
       setReceivedMessages((prev) => [...prev, msg]);
-      console.log("server", msg);
+      // console.log("server", msg);
     });
 
     return () => {

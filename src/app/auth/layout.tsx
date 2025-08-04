@@ -25,7 +25,7 @@ export default function Auth({ children }: { children: ReactNode }) {
   useEffect(() => {
     router.prefetch("/auth/register");
     router.prefetch("/auth/login");
-    console.log("Prefetch for /auth/login completed");
+    // console.log("Prefetch for /auth/login completed");
   }, [router]);
 
   return (

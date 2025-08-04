@@ -13,7 +13,7 @@ export async function middleware(req: NextRequest) {
   }
 
   const token = req.cookies.get("accessToken")?.value;
-  console.log("token", token, "key", JWT_SECRET);
+  // console.log("token", token, "key", JWT_SECRET);
 
   if (!token) {
     const loginUrl = req.nextUrl.clone();
@@ -24,12 +24,12 @@ export async function middleware(req: NextRequest) {
   try {
     const secret = new TextEncoder().encode(JWT_SECRET);
     await jwtVerify(token, secret);
-    console.log("Token success");
+    // console.log("Token success");
     return NextResponse.next();
   } catch (err) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = "/auth/login";
-    console.log("Token failed", err);
+    // console.log("Token failed", err);
     return NextResponse.redirect(loginUrl);
   }
 }

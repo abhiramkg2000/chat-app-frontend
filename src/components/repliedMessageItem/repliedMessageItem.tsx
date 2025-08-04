@@ -73,7 +73,7 @@ const RepliedMessageItem = forwardRef<
         onClick={
           !message.isDeleted
             ? () => {
-                console.log("selected message", { ...message });
+                // console.log("selected message", { ...message });
                 setIsReplying(false);
                 setIsEditing(false);
                 handleEditingMessage(INITIAL_EDIT_MESSAGE_STATE);
@@ -96,10 +96,10 @@ const RepliedMessageItem = forwardRef<
             primary={`"${truncatedRepliedTo}"`}
             onClick={(e) => {
               e.stopPropagation();
-              console.log("repliedToMessage", repliedToMessage);
+              // console.log("repliedToMessage", repliedToMessage);
               // Scroll to the original message element
               const originalMsgRef = messageRefs[message.replyTo];
-              console.log("originalMsgRef", originalMsgRef);
+              // console.log("originalMsgRef", originalMsgRef);
               if (originalMsgRef) {
                 originalMsgRef.scrollIntoView({
                   behavior: "smooth",
@@ -162,7 +162,7 @@ const RepliedMessageItem = forwardRef<
               disableRipple={true}
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("same user reply to message", message);
+                // console.log("same user reply to message", message);
                 setIsReplying(true);
                 setIsEditing(false);
                 handleEditingMessage(INITIAL_EDIT_MESSAGE_STATE);
@@ -175,7 +175,7 @@ const RepliedMessageItem = forwardRef<
               disableRipple={true}
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("message to edit", { ...message });
+                // console.log("message to edit", { ...message });
                 setIsEditing(true);
                 handleEditingMessage(message);
                 setIsReplying(false);
@@ -204,7 +204,7 @@ const RepliedMessageItem = forwardRef<
               disableRipple={true}
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("other user reply to message", message);
+                // console.log("other user reply to message", message);
                 setIsReplying(true);
                 setIsEditing(false);
                 handleEditingMessage(INITIAL_EDIT_MESSAGE_STATE);
