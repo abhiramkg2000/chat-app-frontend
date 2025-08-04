@@ -55,7 +55,17 @@ export default function MessageList({
       setTimeout(() => {
         setUnreadCount(0);
         setFirstUnreadMessageId(null);
-      }, 5000);
+      }, 3000);
+    }
+  };
+
+  // Scroll to the bottom of the message list
+  const scrollToBottom = () => {
+    if (listRef.current) {
+      listRef.current.scrollTo({
+        top: listRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -82,7 +92,7 @@ export default function MessageList({
           setUnreadCount(0);
           setFirstUnreadMessageId(null);
           unreadTimeoutRef.current = null;
-        }, 5000);
+        }, 3000);
       }
     };
 
@@ -101,26 +111,38 @@ export default function MessageList({
 
   useEffect(() => {
     if (!messages.length) return;
+
     const lastMessage = messages[messages.length - 1];
     const isCurrentUserMessage =
       lastMessage.message?.clientId === currentUser.clientId;
 
-    if (isAtBottom || isCurrentUserMessage) {
-      console.log("lastMessageRef: ", lastMessageRef.current);
-      lastMessageRef.current?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
+    // Wait for DOM to paint before checking scroll position
+    requestAnimationFrame(() => {
+      if (listRef.current) {
+        const listEl = listRef.current;
+        const atBottom =
+          listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight < 150;
 
-      setUnreadCount(0);
-      setFirstUnreadMessageId(null);
-    } else {
-      if (unreadCount === 0) {
-        setFirstUnreadMessageId(lastMessage.message?.messageId!);
+        setIsAtBottom(atBottom);
+
+        if (atBottom || isCurrentUserMessage) {
+          console.log("lastMessageRef: ", lastMessageRef.current);
+          lastMessageRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+
+          setUnreadCount(0);
+          setFirstUnreadMessageId(null);
+        } else {
+          if (unreadCount === 0) {
+            setFirstUnreadMessageId(lastMessage.message?.messageId!);
+          }
+
+          setUnreadCount((prev) => prev + 1);
+        }
       }
-
-      setUnreadCount((prev) => prev + 1);
-    }
+    });
   }, [messages.length]);
 
   return (
@@ -206,6 +228,11 @@ export default function MessageList({
         >
           {unreadCount} unread message{unreadCount > 1 ? "s" : ""}
           <ArrowDownwardIcon fontSize="small" />
+        </li>
+      )}
+      {unreadCount === 0 && !isAtBottom && (
+        <li className="scroll-to-bottom-button" onClick={scrollToBottom}>
+          Scroll to Bottom <ArrowDownwardIcon fontSize="small" />
         </li>
       )}
     </List>

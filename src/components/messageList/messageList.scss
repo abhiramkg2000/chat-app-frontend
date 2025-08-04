@@ -23,6 +23,22 @@
     cursor: pointer;
   }
 
+  .scroll-to-bottom-button {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 10px 0;
+    padding: 8px;
+    background-color: variables.$primaryColor;
+    color: variables.$white;
+    border-radius: 16px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
   .unread-message-banner {
     text-align: center;
     margin: 10px 0;
