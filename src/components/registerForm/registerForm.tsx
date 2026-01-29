@@ -89,7 +89,9 @@ export default function RegisterForm() {
           setUserName("");
           setUserPassword("");
           setTouched({ username: false, password: false });
-          router.push("/auth/login");
+          setTimeout(() => {
+            router.push("/auth/login");
+          }, 1000);
         }
       } catch (e) {
         console.log(e);
