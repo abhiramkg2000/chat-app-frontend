@@ -1,5 +1,5 @@
 {
-  "name": "first_next_app",
+  "name": "chat-app-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -18,7 +18,7 @@
     "date-fns": "^4.1.0",
     "emoji-picker-react": "^4.12.0",
     "jose": "^6.0.12",
-    "next": "15.0.3",
+    "next": "^15.0.7",
     "node": "^20.18.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
