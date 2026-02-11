@@ -172,16 +172,43 @@ export default function ChatWindow() {
       setReceivedMessages(msg);
     });
 
-    // Listen to messages
-    socket.on("reply", (msg: MessageType) => {
+    // Add/Reply message
+    socket.on("messageAdded", (msg: MessageType) => {
       setReceivedMessages((prev) => [...prev, msg]);
-      // console.log("server", msg);
+    });
+
+    // Edit message
+    socket.on("messageEdited", (msg: MessageType) => {
+      setReceivedMessages((prev) =>
+        prev.map((message) => {
+          if (message.messageId === msg.messageId) {
+            return { ...msg };
+          } else {
+            return message;
+          }
+        })
+      );
+    });
+
+    // Delete message
+    socket.on("messageDeleted", (messageId: string) => {
+      setReceivedMessages((prev) =>
+        prev.map((message) => {
+          if (message.messageId === messageId) {
+            return { ...message, isDeleted: true };
+          } else {
+            return message;
+          }
+        })
+      );
     });
 
     return () => {
       socket.off("connect");
       socket.off("prefetch");
-      socket.off("reply");
+      socket.off("messageAdded");
+      socket.off("messageEdited");
+      socket.off("messageDeleted");
 
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
