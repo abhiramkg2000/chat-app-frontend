@@ -9,6 +9,8 @@ import RepliedMessageItem from "../repliedMessageItem/repliedMessageItem";
 
 import { useAppSelector } from "@/hooks/storeHooks";
 
+import { SCROLL_THRESHOLD } from "@/constants/commonConstants";
+
 import { MessageType, GroupedMessageType } from "@/types/commonTypes";
 
 import "./messageList.scss";
@@ -42,10 +44,12 @@ export default function MessageList({
   const lastMessageRef = useRef<HTMLLIElement | null>(null);
   const messageRefs = useRef<Record<string, HTMLLIElement | null>>({});
   const unreadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const hasScrolledOnLogin = useRef<boolean>(false);
 
   // Scroll to first unread message
   const scrollToFirstUnread = () => {
     if (firstUnreadMessageId && messageRefs.current[firstUnreadMessageId]) {
+      // Smoothly scroll the chat container so the first unread message appears at the top of the visible area
       messageRefs.current[firstUnreadMessageId]?.scrollIntoView({
         behavior: "smooth",
         block: "start",
@@ -62,6 +66,7 @@ export default function MessageList({
   // Scroll to the bottom of the message list
   const scrollToBottom = () => {
     if (listRef.current) {
+      // Smoothly scroll the chat container all the way to the bottom of the message list
       listRef.current.scrollTo({
         top: listRef.current.scrollHeight,
         behavior: "smooth",
@@ -74,14 +79,19 @@ export default function MessageList({
     if (!listEl) return;
 
     const handleScroll = () => {
-      const threshold = 150; // px from bottom
+      /*  
+        scrollHeight: The total height of all messages (including the ones not visible)
+        scrollTop: How far the user has scrolled from the top
+        clientHeight: The height of the visible area 
+      */
       const atBottom =
         listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight <
-        threshold;
+        SCROLL_THRESHOLD; // px from the bottom of the visible area to be considered at the bottom
       // console.log("atBottom", atBottom);
+
       setIsAtBottom(atBottom);
 
-      // Clear unread if user scrolls to bottom
+      // Clear unread message indicator if the user is at the bottom
       if (atBottom) {
         if (unreadTimeoutRef.current) {
           clearTimeout(unreadTimeoutRef.current);
@@ -120,11 +130,19 @@ export default function MessageList({
     requestAnimationFrame(() => {
       if (listRef.current) {
         const listEl = listRef.current;
+
+        /*  
+          scrollHeight: The total height of all messages (including the ones not visible)
+          scrollTop: How far the user has scrolled from the top
+          clientHeight: The height of the visible area 
+        */
         const atBottom =
-          listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight < 150;
+          listEl.scrollHeight - listEl.scrollTop - listEl.clientHeight <
+          SCROLL_THRESHOLD; // px from the bottom of the visible area to be considered at the bottom
 
         setIsAtBottom(atBottom);
 
+        // To scroll to the bottom, if the current user sends a message or if the users in the room are near the bottom of the message list
         if (atBottom || isCurrentUserMessage) {
           // console.log("lastMessageRef: ", lastMessageRef.current);
           lastMessageRef.current?.scrollIntoView({
@@ -143,6 +161,19 @@ export default function MessageList({
         }
       }
     });
+  }, [messages.length]);
+
+  // To scroll to the bottom of the message list on login/re-login
+  useEffect(() => {
+    if (!lastMessageRef.current) return;
+    if (hasScrolledOnLogin.current) return;
+
+    lastMessageRef.current?.scrollIntoView({
+      behavior: "auto",
+      block: "start",
+    });
+
+    hasScrolledOnLogin.current = true;
   }, [messages.length]);
 
   return (

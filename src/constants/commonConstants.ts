@@ -1,3 +1,4 @@
+// Message
 export const INITIAL_EDIT_MESSAGE_STATE = {
   name: "",
   value: "",
@@ -31,3 +32,6 @@ export const ROOM_ID_HELPER_TEXT =
 // API URL
 export const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
+// Scroll Threshold
+export const SCROLL_THRESHOLD = 150;
