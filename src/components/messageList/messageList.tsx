@@ -1,4 +1,11 @@
-import { Dispatch, SetStateAction, useState, useEffect, useRef } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
 
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -164,7 +171,7 @@ export default function MessageList({
   }, [messages.length]);
 
   // To scroll to the bottom of the message list on login/re-login
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!lastMessageRef.current) return;
     if (hasScrolledOnLogin.current) return;
 
