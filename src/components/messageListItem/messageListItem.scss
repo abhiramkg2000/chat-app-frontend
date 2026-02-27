@@ -2,38 +2,41 @@
 
 .current-user-message-container {
   display: flex;
+  flex-direction: row-reverse;
   justify-content: flex-start;
   margin: 4px 0;
 
   .current-user-message {
-    border-radius: 0px 50px 50px 50px;
-    background-color: variables.$lightGray;
+    border-radius: 50px 0px 50px 50px;
+    background-color: variables.$primaryColor;
     margin: 4px 0;
     width: fit-content;
     max-width: 50%;
     overflow-wrap: break-word;
     white-space: pre-wrap;
-    // align-self: flex-start;
+    // align-self: flex-end;
     // cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    color: variables.$white;
 
     .current-user-message-username {
-      background-color: variables.$silver;
-      color: variables.$white;
+      background-color: variables.$white;
+      color: variables.$primaryColor;
       border-radius: 20px;
+      margin: 4px 8px;
       padding: 8px;
     }
 
     .current-user-message-text {
       width: 100%;
-      margin: 4px 8px;
+      margin: 4px 16px;
     }
 
     .current-user-message-edited-at,
     .current-user-message-deleted {
-      margin: 4px 8px;
+      margin: 4px 16px;
       font-style: italic;
     }
   }
@@ -52,41 +55,38 @@
 
 .other-user-message-container {
   display: flex;
-  flex-direction: row-reverse;
   justify-content: flex-start;
   margin: 4px 0;
 
   .other-user-message {
-    border-radius: 50px 0px 50px 50px;
-    background-color: variables.$primaryColor;
+    border-radius: 0px 50px 50px 50px;
+    background-color: variables.$lightGray;
     margin: 4px 0;
     width: fit-content;
     max-width: 50%;
     overflow-wrap: break-word;
     white-space: pre-wrap;
-    // align-self: flex-end;
+    // align-self: flex-start;
     // cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    color: variables.$white;
 
     .other-user-message-username {
-      background-color: variables.$white;
-      color: variables.$primaryColor;
+      background-color: variables.$silver;
+      color: variables.$white;
       border-radius: 20px;
-      margin: 4px 8px;
       padding: 8px;
     }
 
     .other-user-message-text {
       width: 100%;
-      margin: 4px 16px;
+      margin: 4px 8px;
     }
 
     .other-user-message-edited-at,
     .other-user-message-deleted {
-      margin: 4px 16px;
+      margin: 4px 8px;
       font-style: italic;
     }
   }
